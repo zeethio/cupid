@@ -1,0 +1,12 @@
+// {type:activity}
+// {generate:true}
+(start)->(Online)->|a|
+|a|->(StartProofEventKey)->(StartProofEvent)
+(StartProofEvent)->(NewProofEventClient)->(listenProofRequest)
+(NewProofEventClient)->(note: APIInfo {url, token})
+(listenProofRequest)->(listenProofRequestOnce)->(ListenProofEvent)->|b|
+|b|->(InitConnect)->|b|
+|b|->(ComputeProof)->(processComputeProof)->(prover.ComputeProof)->(ResponseProofEvent)
+(prover:ffiwrapper.Prover.ComputeProof)->(GenerateWinningPoSt)
+
+|a|->(NewWinningPoStProver)->(WinningPoStProver)->(StorageWpp)-|a|

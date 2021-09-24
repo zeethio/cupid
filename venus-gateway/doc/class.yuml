@@ -1,0 +1,24 @@
+// {type:class}
+// {direction:topDown}
+// {generate:true}
+
+[note: Venus gatewat class diagram{bg:cornsilk}]
+[VenusGateway]++-[GatewayAPI]
+
+[GatewayAPI]+->[ProofEventStream|minerConnections, authClient|ComputeProof]
+
+[GatewayAPI]+->[WalletEventStream|minerConnections, authClient|ComputeProof]
+
+[GatewayAPI]uses-.->[auth.go|seckey|MakeToken, Verify]
+[auth.go]uses-.->[vanus-auth/auth2]
+[walletConnMgr]uses-.->[walletChannelInfo]
+[walletConnMgr]+-.->[WalletInfo]
+
+[walletChannelInfo]uses-.->[signBytes]
+[walletChannelInfo]uses-.->[addrs map]
+
+[walletChannelInfo]-.->[ChannelInfo]
+[WalletInfo]-.->[connections:map(uuid)walletChannelInfo]
+[WalletInfo]-.->[WalletAccount]
+[WalletInfo]-.->[SupportAccounts]
+[WalletEventStream]+-.->[walletConnMgr]

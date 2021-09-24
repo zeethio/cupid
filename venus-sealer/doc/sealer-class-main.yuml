@@ -1,0 +1,10 @@
+// {type:class}
+// {direction:topDown}
+// {generate:true}
+
+[note: Venus sealer class diagram{bg:cornsilk}]
+[venus-sealer]+-[MinerHandler]
+[venus-sealer]+-[CurrentDealInfoManager]
+[venus-sealer]+-[PreCommitBatcher]
+[venus-sealer]+-[CommitBatcher]
+[venus-sealer]+-[SectorManager]

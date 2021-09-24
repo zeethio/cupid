@@ -1,0 +1,14 @@
+// {type:usecase}
+// {direction:leftToRight}
+// {generate:true}
+
+[Proof Event client]-(ListenProofEvent)
+[Proof Event client]-(ResponseProofEvent)
+[Wallet Event client]-(ListenWalletEvent)
+[Wallet Event client]-(ResponseWalletEvent)
+[Wallet Event client]-(SupportNewAccount)
+[Server]-(SendComputeProof)
+[Server]-(WalletSign)
+[Server]-(WalletHas)
+(venus-authentication)
+

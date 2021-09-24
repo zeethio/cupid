@@ -1,0 +1,31 @@
+// {type:class}
+// {direction:topDown}
+// {generate:true}
+
+[note: Venus sealer class diagram{bg:cornsilk}]
+[venus-sealer]+-[MinerHandler]
+[MinerHandler]+-[minerapi:StorageMiner]
+[MinerHandler]+-[rpcServer:jsonrpc.RPCServer]
+[minerapi:StorageMiner]+-[Messager:api.IMessager]
+[minerapi:StorageMiner]+-[Prover:storage.WinningPoStProver]
+[messager rpc client]-[note: venus-messager/api/client/NewMessageRPC {bg:cornsilk}]
+[Messager:api.IMessager]+-[messager rpc client]
+[venus-sealer]+-[nodeApi:FullNode]
+[nodeApi:FullNode]-[note: json RPC client]
+[minerapi:StorageMiner]+-[SectorManager]
+[minerapi:StorageMiner]+-[SectorBlocks:sectorblocks.SectorBlocks]
+[SectorBlocks:sectorblocks.SectorBlocks]+-[keys:types.DealRef]
+[SectorManager]+-[ffiwrapper.StorageSealer]
+[SectorManager]+-[storage.Prover]
+[SectorManager]+-[FaultTracker]
+
+[Prover:storage.WinningPoStProver]+-[prover:storage.Prover]
+[Prover:storage.WinningPoStProver]+-[verifier:ffiwrapper.Verifier]
+[Prover:storage.WinningPoStProver]+-[miner:abi.ActorID]
+[Prover:storage.WinningPoStProver]+-[winnRpt:abi.RegisteredPoStProof]
+
+[keys:types.DealRef]+-[Id]        
+[keys:types.DealRef]+-[DealId]    
+[keys:types.DealRef]+-[SectorId]  
+[keys:types.DealRef]+-[PadOffset] 
+[keys:types.DealRef]+-[UnPadSize] 

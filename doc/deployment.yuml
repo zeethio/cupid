@@ -1,0 +1,26 @@
+// {type:deployment}
+// {generate:true}
+
+[venus-auth]-[venus-messager]
+[venus-auth]-[venus-gateway]
+[venus-auth]-[venus-miner]
+[venus-auth]-[venus]
+[venus-auth]-[note: api:8989 {bg:cornsilk}]
+
+[venus]-[venus-messager]
+[venus]-[venus-miner]
+[venus]-[venus-sealer]
+[venus]-[note: api:3453, prometh:9400, jaeger:6831 {bg:cornsilk}]
+
+[venus-gateway]-[venus-messager]
+[venus-gateway]-[venus-wallet]
+[venus-gateway]-[venus-sealer]
+[venus-gateway]-[venus-miner]
+[venus-gateway]-[note: api: 45132 {bg:cornsilk}]
+
+[venus-miner]-[note: uses admin token to connect to venus and gateway{bg:cornsilk}]
+
+[venus-messager]-[venus-sealer]
+[venus-messager]-[note: api:39812, uses admin token to connect to venus and gateway{bg:cornsilk}]
+
+[venus-sealer]-[venus-worker]

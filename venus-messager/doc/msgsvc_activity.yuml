@@ -1,0 +1,7 @@
+// {type:activity}
+// {generate:true}
+
+(start)->(MessagerService)->(NodeService)
+(NodeService)->(notifs <- ChainNotify)->(ProcessNewHead)
+(ProcessNewHead)->(<-ms.headChans)->(doRefreshMessageState)
+(doRefreshMessageState)->(updateMessageState UpdateMessageByCid)->(SetMessage)

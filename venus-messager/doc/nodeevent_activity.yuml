@@ -1,0 +1,9 @@
+// {type:activity}
+// {generate:true}
+
+(start)->(StartNodeEvents)->(listenHeadChangesOnce)
+(listenHeadChangesOnce)->(notifs <- ChainNotify)->(ProcessNewHead)
+(ProcessNewHead)->(<-ms.headChans)->(doRefreshMessageState)
+(doRefreshMessageState)->(updateMessageState UpdateMessageByCid)->(SetMessage)
+
+(StartNodeEvents)->(StartPushMessage)

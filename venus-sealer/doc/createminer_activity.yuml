@@ -1,0 +1,6 @@
+// {type:activity}
+// {generate:true}
+(start)->(createStorageMiner)-><a>[Owner speicifed]->(parse owner addr)->(PushMessage-CheckWorker)
+<a>[Owner Not speicifed]->(WalletDefaultAddress)->(PushMessage-CheckWorker)
+(PushMessage-CheckWorker)->(WaitMessage)->(PushMessage-CreateMiner)
+(PushMessage-CreateMiner)->(WaitMessage-CreateMiner)

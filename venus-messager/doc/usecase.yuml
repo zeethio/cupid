@@ -1,0 +1,11 @@
+// {type:usecase}
+// {direction:leftToRight}
+// {generate:true}
+
+[venus-sealer]-(PushMessage)
+(PushMessage)>(SetMessage localstoarage)
+
+[service]-(StartNodeEvents)
+(StartNodeEvents)>(StartPushMessage)
+(StartPushMessage)>(pushMessageToPool)
+(pushMessageToPool)>(nodeClient.MpoolPush)
