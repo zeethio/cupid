@@ -11,10 +11,18 @@ ENV PATH=$PATH:/usr/local/go/bin
 
 
 WORKDIR '/app'
-RUN  git clone https://github.com/zeethio/venus.git && \
+RUN  git clone https://github.com/filecoin-project/venus.git && \
      cd venus && \
      git checkout incubation && \
      make deps && \
      make
 
-ENTRYPOINT ["/app/venus/venus", "daemon"]
+# Ports for Swarm and CmdAPI
+EXPOSE 6000
+EXPOSE 3453
+
+ENTRYPOINT ["/app/venus/venus"]
+
+# Execute the daemon subcommand by default
+CMD ["daemon"]
+
