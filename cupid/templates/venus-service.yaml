@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "cupid.fullname" . }}
+  name: {{ include "cupid.fullname" . }}-venus
   labels:
     {{- include "cupid.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.venus.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
+    - port: {{ .Values.venus.service.port }}
       targetPort: http
       protocol: TCP
       name: http

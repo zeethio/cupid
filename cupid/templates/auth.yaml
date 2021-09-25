@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "cupid.fullname" . }}-venus
+  name: {{ include "cupid.fullname" . }}-auth
   labels:
     {{- include "cupid.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.venus.pool.replicaCount }}
+  replicas: {{ .Values.auth.pool.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
@@ -31,15 +31,15 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.venus.image.repository }}:{{ .Values.venus.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.venus.image.pullPolicy }}
+          image: "{{ .Values.auth.image.repository }}:{{ .Values.auth.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.auth.image.pullPolicy }}
           args:          
             {{-  range .Values.arguments }}
             - {{ . }}
             {{- end }}
           ports:
             - name: http
-              containerPort: 3453
+              containerPort: 8989
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -50,16 +50,16 @@ spec:
               path: /
               port: http
           resources:
-            {{- toYaml .Values.venus.agent.resources | nindent 12 }}
-      {{- with .Values.venus.pool.nodeSelector }}
+            {{- toYaml .Values.auth.agent.resources | nindent 12 }}
+      {{- with .Values.auth.pool.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.venus.pool.affinity }}
+      {{- with .Values.auth.pool.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.venus.pool.tolerations }}
+      {{- with .Values.auth.pool.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
