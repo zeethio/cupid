@@ -2,24 +2,9 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
-
-image:
-  repository: zeethio/venus
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "v0.1"
-
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
-arguments:
-- daemon
-- --import-snapshot
-- https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car 
-- --auth-url
-- http://localhost:8989
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -29,6 +14,34 @@ serviceAccount:
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
+
+venus:
+  image:
+    repository: zeethio/venus
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v0.1"
+  arguments:
+  - daemon
+  - --import-snapshot
+  - https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car 
+  - --auth-url
+  - http://localhost:8989
+  pool:
+    replicaCount: 1
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+    storage: 1000Gi
+  agent:
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+
 
 podAnnotations: {}
 
@@ -63,18 +76,6 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
 autoscaling:
   enabled: false
   minReplicas: 1
@@ -82,8 +83,3 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}

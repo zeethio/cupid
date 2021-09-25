@@ -6,7 +6,7 @@ metadata:
     {{- include "cupid.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.venus.pool.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
@@ -31,8 +31,8 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.venus.image.repository }}:{{ .Values.venus.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.venus.image.pullPolicy }}
           args:          
             {{-  range .Values.arguments }}
             - {{ . }}
@@ -50,16 +50,16 @@ spec:
               path: /
               port: http
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
+            {{- toYaml .Values.venus.agent.resources | nindent 12 }}
+      {{- with .Values.venus.pool.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.venus.pool.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.venus.pool.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

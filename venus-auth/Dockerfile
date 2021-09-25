@@ -16,5 +16,7 @@ RUN  git clone https://github.com/zeethio/venus-auth.git && \
      git checkout incubation && \
      make
 
+EXPOSE 8989
+
 ENTRYPOINT ["/app/venus-auth/venus-auth"]
 CMD ["run"]
