@@ -69,6 +69,95 @@ auth:
   service:
     type: NodePort
     port: 8989
+
+
+messager:
+  image:
+    repository: zeethio/venus-messager
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v0.1"
+  arguments:
+  - run 
+  - --auth-url
+  - http://localhost:8989 
+  - --node-url 
+  - /ip4/127.0.0.1/tcp/3453 
+  - --gateway-url
+  - /ip4/127.0.0.1/tcp/45132 
+  - --auth-token
+  - tokendata
+  pool:
+    replicaCount: 1
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+  agent:
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 128Mi
+      requests:
+        cpu: 1000m
+        memory: 128Mi
+  service:
+    type: NodePort
+    port: 39812
+
+gateway:
+  image:
+    repository: zeethio/venus-gateway
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v0.1"
+  arguments:
+  - --listen
+  - /ip4/0.0.0.0/tcp/45132 
+  - run 
+  - --auth-url
+  - http://localhost:8989
+  pool:
+    replicaCount: 1
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+  agent:
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 128Mi
+      requests:
+        cpu: 1000m
+        memory: 128Mi
+  service:
+    type: NodePort
+    port: 39812
+
+miner:
+  image:
+    repository: zeethio/venus-miner
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v0.1"
+  arguments:
+  - run
+  pool:
+    replicaCount: 1
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+  agent:
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 128Mi
+      requests:
+        cpu: 1000m
+        memory: 128Mi
+  service:
+    type: NodePort
+    port: 39812
+
 podAnnotations: {}
 
 podSecurityContext: {}

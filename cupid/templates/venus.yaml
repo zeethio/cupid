@@ -34,7 +34,7 @@ spec:
           image: "{{ .Values.venus.image.repository }}:{{ .Values.venus.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.venus.image.pullPolicy }}
           args:          
-            {{-  range .Values.arguments }}
+            {{-  range .Values.venus.arguments }}
             - {{ . }}
             {{- end }}
           ports:

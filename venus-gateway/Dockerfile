@@ -11,11 +11,11 @@ ENV PATH=$PATH:/usr/local/go/bin
 
 
 WORKDIR '/app'
-RUN  git clone https://github.com/zeethio/venus-gateway.git && \
+RUN  git clone https://github.com/ipfs-force-community/venus-gateway.git && \
      cd venus-gateway && \
      git checkout incubation && \
      go mod tidy && \
      make
-
+EXPOSE 45132
 ENTRYPOINT ["/app/venus-gateway/venus-gateway"]
 CMD ["run"]

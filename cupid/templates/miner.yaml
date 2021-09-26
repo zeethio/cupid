@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "cupid.fullname" . }}-auth
+  name: {{ include "cupid.fullname" . }}-miner
   labels:
     {{- include "cupid.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.auth.pool.replicaCount }}
+  replicas: {{ .Values.miner.pool.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
@@ -31,15 +31,15 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.auth.image.repository }}:{{ .Values.auth.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.auth.image.pullPolicy }}
+          image: "{{ .Values.miner.image.repository }}:{{ .Values.miner.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.miner.image.pullPolicy }}
           args:          
-            {{-  range .Values.auth.arguments }}
+            {{-  range .Values.miner.arguments }}
             - {{ . }}
             {{- end }}
           ports:
             - name: http
-              containerPort: 8989
+              containerPort: 3453
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -50,16 +50,16 @@ spec:
               path: /
               port: http
           resources:
-            {{- toYaml .Values.auth.agent.resources | nindent 12 }}
-      {{- with .Values.auth.pool.nodeSelector }}
+            {{- toYaml .Values.miner.agent.resources | nindent 12 }}
+      {{- with .Values.miner.pool.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.auth.pool.affinity }}
+      {{- with .Values.miner.pool.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.auth.pool.tolerations }}
+      {{- with .Values.miner.pool.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
