@@ -20,13 +20,13 @@ venus:
     repository: zeethio/venus
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "v0.1"
+    tag: "v0.2"
   arguments:
-  - daemon
-  - --import-snapshot
-  - https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car 
-  - --auth-url
-  - http://localhost:8989
+    snapshot: https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car 
+    authUrl: http://localhost:8989
+    mountpath: /nfs/cupid
+    repodir: /nfs/cupid/repodir
+    paramdir: /nfs/cupid/filecoin-proof-parameters
   pool:
     replicaCount: 1
     nodeSelector: {}
@@ -36,11 +36,11 @@ venus:
   agent:
     resources:
       limits:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 8
+        memory: 128Gi
       requests:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 4
+        memory: 96Gi
   service:
     type: NodePort
     port: 3453
@@ -57,7 +57,7 @@ auth:
     nodeSelector: {}
     tolerations: []
     affinity: {}
-    storage: 1000Gi
+    storage: 1Gi
   agent:
     resources:
       limits:

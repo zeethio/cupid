@@ -1,42 +1,42 @@
+{{- range untilStep 1 (int (add1 (int64 .Values.venus.pool.replicaCount))) 1 }}
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: {{ include "cupid.fullname" . }}-venus
+  name: {{ include "cupid.fullname" $ }}-venus{{ . }}
   labels:
-    {{- include "cupid.labels" . | nindent 4 }}
+    {{- include "cupid.labels" $ | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.venus.pool.replicaCount }}
-  {{- end }}
+  replicas: 1 
   selector:
     matchLabels:
-      {{- include "cupid.selectorLabels" . | nindent 6 }}
+      {{- include "cupid.selectorLabels" $ | nindent 6 }}
+  serviceName: {{ include "cupid.fullname" $ }}-venus{{ . }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with $.Values.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "cupid.selectorLabels" . | nindent 8 }}
+        {{- include "cupid.selectorLabels" $ | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- with $.Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "cupid.serviceAccountName" . }}
+      serviceAccountName: {{ include "cupid.serviceAccountName" $ }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml $.Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ $.Chart.Name }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.venus.image.repository }}:{{ .Values.venus.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.venus.image.pullPolicy }}
-          args:          
-            {{-  range .Values.venus.arguments }}
-            - {{ . }}
-            {{- end }}
+            {{- toYaml $.Values.securityContext | nindent 12 }}
+          image: "{{ $.Values.venus.image.repository }}:{{ $.Values.venus.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ $.Values.venus.image.pullPolicy }}
+          args: ["--repodir", {{ $.Values.venus.arguments.repodir }}, "daemon", "--import-snapshot", {{ $.Values.venus.arguments.snapshot }},"--auth-url", {{ $.Values.venus.arguments.authUrl }}  ]
+          env:
+            - name: FIL_PROOFS_PARAMETER_CACHE
+              value: {{ $.Values.venus.arguments.paramdir }}
           ports:
             - name: http
               containerPort: 3453
@@ -45,21 +45,35 @@ spec:
             httpGet:
               path: /
               port: http
+            initialDelaySeconds: 3600
           readinessProbe:
             httpGet:
               path: /
               port: http
+            initialDelaySeconds: 3600
           resources:
-            {{- toYaml .Values.venus.agent.resources | nindent 12 }}
-      {{- with .Values.venus.pool.nodeSelector }}
+            {{- toYaml $.Values.venus.agent.resources | nindent 12 }}
+          volumeMounts:
+          - name: data
+            mountPath: {{ $.Values.venus.arguments.mountpath }}
+      {{- with $.Values.venus.pool.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.venus.pool.affinity }}
+      {{- with $.Values.venus.pool.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.venus.pool.tolerations }}
+      {{- with $.Values.venus.pool.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteMany"]
+      resources:
+        requests:
+          storage: {{ $.Values.venus.pool.storage }}
+{{- end }}
