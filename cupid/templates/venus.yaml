@@ -39,18 +39,20 @@ spec:
               value: {{ $.Values.venus.arguments.paramdir }}
           ports:
             - name: http
-              containerPort: 3453
+              containerPort: {{ $.Values.venus.service.port }}
               protocol: TCP
           livenessProbe:
-            httpGet:
-              path: /
-              port: http
-            initialDelaySeconds: 3600
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-            initialDelaySeconds: 3600
+            tcpSocket:
+              port: {{ $.Values.venus.service.nodePort }}
+            initialDelaySeconds: 60
+            failureThreshold: 1
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket:
+              port: {{ $.Values.venus.service.nodePort }}
+            initialDelaySeconds: 60
+            failureThreshold: 360
+            periodSeconds: 10
           resources:
             {{- toYaml $.Values.venus.agent.resources | nindent 12 }}
           volumeMounts:
