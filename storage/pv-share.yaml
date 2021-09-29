@@ -4,11 +4,11 @@ metadata:
   name: nfs-cupid
 spec:
   capacity:
-    storage: 1200Gi
+    storage: 1000Gi
   volumeMode: Filesystem
   accessModes:
    - ReadWriteMany
-  persistentVolumeReclaimPolicy: Recycle
+  persistentVolumeReclaimPolicy: Retain
   mountOptions:
     - hard
     - nfsvers=4.1

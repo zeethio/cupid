@@ -8,6 +8,7 @@ spec:
   type: {{ .Values.venus.service.type }}
   ports:
     - port: {{ .Values.venus.service.port }}
+      nodePort:  {{ .Values.venus.service.nodePort }}
       targetPort: http
       protocol: TCP
       name: http

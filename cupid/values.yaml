@@ -43,6 +43,7 @@ venus:
         memory: 96Gi
   service:
     type: NodePort
+    nodePort: 30002
     port: 3453
 
 auth:
