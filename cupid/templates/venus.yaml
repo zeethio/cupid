@@ -33,7 +33,7 @@ spec:
             {{- toYaml $.Values.securityContext | nindent 12 }}
           image: "{{ $.Values.venus.image.repository }}:{{ $.Values.venus.image.tag | default $.Chart.AppVersion }}"
           imagePullPolicy: {{ $.Values.venus.image.pullPolicy }}
-          args: ["--repodir", {{ $.Values.venus.arguments.repodir }}, "daemon", {{- if $.Values.venus.arguments.snapshot }} "--import-snapshot", {{ $.Values.venus.arguments.snapshot }},{{- end }} "--auth-url", {{ $.Values.venus.arguments.authUrl }}  ]
+          args: ["--repodir", {{ $.Values.venus.arguments.repodir }}, "daemon", {{- if $.Values.venus.arguments.snapshot }} "--import-snapshot", {{ $.Values.venus.arguments.snapshot }},{{- end }} "--auth-url", {{ include "cupid.fullname" $ }}-auth-service ]
           env:
             - name: FIL_PROOFS_PARAMETER_CACHE
               value: {{ $.Values.venus.arguments.paramdir }}
@@ -41,15 +41,21 @@ spec:
             - name: http
               containerPort: {{ $.Values.venus.service.port }}
               protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: {{ $.Values.venus.service.port }}
+            initialDelaySeconds: 60
+            failureThreshold: 1
+            periodSeconds: 10
           livenessProbe:
             tcpSocket:
-              port: {{ $.Values.venus.service.nodePort }}
+              port: {{ $.Values.venus.service.port }}
             initialDelaySeconds: 60
             failureThreshold: 1
             periodSeconds: 10
           startupProbe:
             tcpSocket:
-              port: {{ $.Values.venus.service.nodePort }}
+              port: {{ $.Values.venus.service.port }}
             initialDelaySeconds: 60
             failureThreshold: 360
             periodSeconds: 10
