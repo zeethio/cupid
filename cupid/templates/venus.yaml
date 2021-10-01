@@ -37,10 +37,15 @@ spec:
           env:
             - name: FIL_PROOFS_PARAMETER_CACHE
               value: {{ $.Values.venus.arguments.paramdir }}
+            - name: BELLMAN_NO_GPU 
+              value: "1"
+            - name: BELLMAN_VERIFIER 
+              value: "cpu"
           ports:
             - name: http
               containerPort: {{ $.Values.venus.service.port }}
               protocol: TCP
+{{- /*
           readinessProbe:
             tcpSocket:
               port: {{ $.Values.venus.service.port }}
@@ -59,6 +64,7 @@ spec:
             initialDelaySeconds: 60
             failureThreshold: 360
             periodSeconds: 10
+*/}}
           resources:
             {{- toYaml $.Values.venus.agent.resources | nindent 12 }}
           volumeMounts:
