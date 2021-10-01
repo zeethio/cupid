@@ -1,0 +1,18 @@
+// {type:class}
+// {direction:topDown}
+// {generate:true}
+
+[note: Venus Auth class diagram{bg:cornsilk}]
+
+[venus-auth]+-[oauthApp]
+[venus-auth]+-[cli.App]
+[venus-auth]+-[router/http.Handler]
+[oauthApp]++-[OAuthService]
+[OAuthService]+-[jwtOAuth]
+
+[jwtOAuth]+-[Store]
+
+[Store]^[badgerStore]
+[Store]^[mysqlStore]
+
+

@@ -1,0 +1,16 @@
+// {type:class}
+// {direction:leftToRight}
+// {generate:true}
+
+[Syscalls]^[SyscallsImpl | VerifySignature | HashBlake2b | ComputeUnsealedSectorCID | VerifySeal | BatchVerifySeals | VerifyAggregateSeals | VerifyPoSt | VerifyConsensusFault]
+[Syscalls]++-[context.Context]
+[Syscalls]+-[gas.GasTracker]
+[Syscalls]+-[gas.Pricelist]
+[Syscalls]+-[SyscallsStateView]
+
+[DefaultProcessor]
+[vm.ActorCodeLoader]
+[vm.SyscallsImpl]
+
+[faultChecker]
+[ffiwrapper.Verifier]

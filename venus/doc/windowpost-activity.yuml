@@ -1,0 +1,29 @@
+// {type:activity}
+// {generate:true}
+(note: An informal use of event diagram to represent windowPost callchain  {bg:beige})
+(start)->(VerifyPoSt/vm)
+(VerifyPoSt/vm)->(note: pkg/vm/vmcontext/syscalls.go {bg:beige})
+(VerifyPoSt/vmsupport)->(note: pkg/vmsupport/syscalls.go {bg:beige})
+
+
+(VerifyWindowPoSt/filecoin-ffi)->(note: extern/filecoin-ffi/proofs.go {bg:beige})
+(generated.FilVerifyWindowPost/filecoin-ffi)->(note: extern/filecoin-ffi/generated/generated.go {bg:beige})
+(C.fil_verify_window_post)->(note: extern/filecoin-ffi/rust/src/proofs/api.rs {bg:beige})
+(fil_verify_window_post)->(note: filecoin-project/filecoin-ffi/rust/src/proofs/api.rs {bg:beige})
+
+(verify_window_post/ust-filecoin-proofs-api)->(note: filecoin-project/rust-filecoin-proofs-api/src/post.rs {bg:beige})
+(verify_window_post)->(note: filecoin-project/rust-fil-proofs/filecoin-proofs/src/api/window_post.rs {bg:beige})
+(verify/compound_proof)->(note: filecoin-project/rust-fil-proofs/storage-proofs-core/src/compound_proof.rs {bg:beige})
+(verify_proofs_batch)->(note: filecoin-project/bellperson/src/groth16/verifier.rs  {bg:beige})
+
+(VerifyPoSt/vm)->(VerifyPoSt/vmsupport)
+(VerifyPoSt/vmsupport)->(VerifyWindowPoSt/filecoin-ffi)
+(VerifyWindowPoSt/filecoin-ffi)->(generated.FilVerifyWindowPost/filecoin-ffi)
+(generated.FilVerifyWindowPost/filecoin-ffi)->(C.fil_verify_window_post)
+(C.fil_verify_window_post)->(fil_verify_window_post)
+(fil_verify_window_post)->(verify_window_post/ust-filecoin-proofs-api)
+(verify_window_post/ust-filecoin-proofs-api)->(verify_window_post)
+(verify_window_post)->(verify/compound_proof)
+(verify/compound_proof)->(verify_proofs_batch)
+(verify_proofs_batch)->(end)
+
