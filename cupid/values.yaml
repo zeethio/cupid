@@ -24,15 +24,21 @@ venus:
   arguments:
     snapshot: https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car 
     authUrl: http://localhost:8989
-    mountpath: /nfs/cupid
-    repodir: /nfs/cupid/repodir
-    paramdir: /nfs/cupid/filecoin-proof-parameters
+    repodir: /data/repodir
+    paramdir: /proofparams
+    bellmannogpu: "1"
+    bellmanverifier: "cpu"
+  volumes:
+    mountpathData: /data
+    mountpathProofParams: /proofparams
+
   pool:
     replicaCount: 1
     nodeSelector: {}
     tolerations: []
     affinity: {}
-    storage: 1000Gi
+    storage: 600Gi
+    paramStorage: 300Gi
   agent:
     resources:
       limits:
@@ -52,7 +58,10 @@ auth:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "v0.1"
- 
+  arguments: 
+    repo: /data/repo
+  volumes:
+    mountpathData: /data
   pool:
     replicaCount: 1
     nodeSelector: {}

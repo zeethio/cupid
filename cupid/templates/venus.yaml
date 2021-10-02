@@ -38,9 +38,9 @@ spec:
             - name: FIL_PROOFS_PARAMETER_CACHE
               value: {{ $.Values.venus.arguments.paramdir }}
             - name: BELLMAN_NO_GPU 
-              value: "1"
+              value: "1" {{/* $.Values.venus.arguments.bellmannogpu */}}
             - name: BELLMAN_VERIFIER 
-              value: "cpu"
+              value: "cpu" {{/* $.Values.venus.arguments.bellmanverifier */}}
           ports:
             - name: http
               containerPort: {{ $.Values.venus.service.port }}
@@ -69,7 +69,9 @@ spec:
             {{- toYaml $.Values.venus.agent.resources | nindent 12 }}
           volumeMounts:
           - name: data
-            mountPath: {{ $.Values.venus.arguments.mountpath }}
+            mountPath: {{ $.Values.venus.volumes.mountpathData }}
+          - name: proofparams
+            mountPath: {{ $.Values.venus.volumes.mountpathProofParams }}
       {{- with $.Values.venus.pool.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -87,7 +89,16 @@ spec:
       name: data
     spec:
       accessModes: ["ReadWriteMany"]
+      storageClassName: venus
       resources:
         requests:
           storage: {{ $.Values.venus.pool.storage }}
+  - metadata:
+      name: proofparams
+    spec:
+      accessModes: ["ReadOnlyMany"]
+      storageClassName: proofparams
+      resources:
+        requests:
+          storage: {{ $.Values.venus.pool.paramStorage }}
 {{- end }}
