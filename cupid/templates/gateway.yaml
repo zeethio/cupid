@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "cupid.fullname" . }}-gateway
   labels:
@@ -11,6 +11,7 @@ spec:
   selector:
     matchLabels:
       {{- include "cupid.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "cupid.fullname" . }}-gateway
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -33,14 +34,12 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.gateway.image.repository }}:{{ .Values.gateway.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.gateway.image.pullPolicy }}
-          args:          
-            {{-  range .Values.gateway.arguments }}
-            - {{ . }}
-            {{- end }}
+         {{/* args: ["--listen", "/ip4/0.0.0.0/tcp/"{{ .Values.gateway.service.port }}, "--auth-url", "http://"{{ .Values.gateway.arguments.authUrl }}
           ports:
             - name: http
-              containerPort: 3453
+              containerPort: {{ .Values.gateway.service.port }}
               protocol: TCP
+{{/*
           livenessProbe:
             httpGet:
               path: /
@@ -49,6 +48,7 @@ spec:
             httpGet:
               path: /
               port: http
+*/}}
           resources:
             {{- toYaml .Values.gateway.agent.resources | nindent 12 }}
       {{- with .Values.gateway.pool.nodeSelector }}
