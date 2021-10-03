@@ -1,16 +1,17 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "cupid.fullname" . }}-messager
   labels:
-    {{- include "cupid.labels" . | nindent 4 }}
+    app: {{ .Values.messager.selectorLabel }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.messager.pool.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "cupid.selectorLabels" . | nindent 6 }}
+      app: {{ .Values.messager.selectorLabel }}
+  serviceName: {{ include "cupid.fullname" . }}-messager
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "cupid.selectorLabels" . | nindent 8 }}
+        app: {{ .Values.messager.selectorLabel }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -33,14 +34,12 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.messager.image.repository }}:{{ .Values.messager.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.messager.image.pullPolicy }}
-          args:          
-            {{-  range .Values.messager.arguments }}
-            - {{ . }}
-            {{- end }}
+          args: ["run", "--auth-url", {{ .Values.messager.arguments.authUrl }}, "--node-url",  {{ .Values.messager.arguments.nodeUrl }}, "--gateway-url",  {{ .Values.messager.arguments.gatewayUrl }}, "--auth-token",  {{ .Values.messager.arguments.authToken }}]
           ports:
             - name: http
               containerPort: 3453
               protocol: TCP
+{{/*
           livenessProbe:
             httpGet:
               path: /
@@ -49,6 +48,7 @@ spec:
             httpGet:
               path: /
               port: http
+*/}}
           resources:
             {{- toYaml .Values.messager.agent.resources | nindent 12 }}
       {{- with .Values.messager.pool.nodeSelector }}

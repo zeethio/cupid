@@ -1,16 +1,17 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "cupid.fullname" . }}-miner
   labels:
-    {{- include "cupid.labels" . | nindent 4 }}
+    app: {{ .Values.miner.selectorLabel }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.miner.pool.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "cupid.selectorLabels" . | nindent 6 }}
+      app: {{ .Values.miner.selectorLabel }}
+  serviceName: {{ include "cupid.fullname" . }}-miner-service
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "cupid.selectorLabels" . | nindent 8 }}
+        app: {{ .Values.miner.selectorLabel }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

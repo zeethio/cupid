@@ -3,15 +3,15 @@ kind: StatefulSet
 metadata:
   name: {{ include "cupid.fullname" . }}-auth
   labels:
-    {{- include "cupid.labels" . | nindent 4 }}
+    app: {{ .Values.auth.selectorLabel }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.auth.pool.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "cupid.selectorLabels" . | nindent 6 }}
-  serviceName: {{ include "cupid.fullname" . }}-auth
+      app: {{ .Values.auth.selectorLabel }}
+  serviceName: {{ include "cupid.fullname" . }}-auth-service
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "cupid.selectorLabels" . | nindent 8 }}
+        app: {{ .Values.auth.selectorLabel }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

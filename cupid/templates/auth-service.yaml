@@ -3,13 +3,12 @@ kind: Service
 metadata:
   name: {{ include "cupid.fullname" . }}-auth-service
   labels:
-    {{- include "cupid.labels" . | nindent 4 }}
+    app: {{ .Values.auth.selectorLabel }}
 spec:
   type: {{ .Values.auth.service.type }}
   ports:
     - port: {{ .Values.auth.service.port }}
       nodePort:  {{ .Values.auth.service.nodePort }}
       protocol: TCP
-      name: http
   selector:
-    {{- include "cupid.selectorLabels" . | nindent 4 }}
+    app: {{ .Values.auth.selectorLabel }}

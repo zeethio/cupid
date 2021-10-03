@@ -4,12 +4,12 @@ kind: StatefulSet
 metadata:
   name: {{ include "cupid.fullname" $ }}-venus{{ . }}
   labels:
-    {{- include "cupid.labels" $ | nindent 4 }}
+    app: {{ $.Values.venus.selectorLabel }}
 spec:
   replicas: 1 
   selector:
     matchLabels:
-      {{- include "cupid.selectorLabels" $ | nindent 6 }}
+      app: {{ $.Values.venus.selectorLabel }}
   serviceName: {{ include "cupid.fullname" $ }}-venus{{ . }}
   template:
     metadata:
@@ -18,7 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "cupid.selectorLabels" $ | nindent 8 }}
+        app: {{ $.Values.venus.selectorLabel }}
     spec:
       {{- with $.Values.imagePullSecrets }}
       imagePullSecrets:

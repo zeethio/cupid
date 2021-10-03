@@ -3,14 +3,12 @@ kind: Service
 metadata:
   name: {{ include "cupid.fullname" . }}-venus-service
   labels:
-    {{- include "cupid.labels" . | nindent 4 }}
+    app: {{ .Values.venus.selectorLabel }}
 spec:
   type: {{ .Values.venus.service.type }}
   ports:
     - port: {{ .Values.venus.service.port }}
       nodePort:  {{ .Values.venus.service.nodePort }}
-      targetPort: http
       protocol: TCP
-      name: http
   selector:
-    {{- include "cupid.selectorLabels" . | nindent 4 }}
+    app: {{ .Values.venus.selectorLabel }}

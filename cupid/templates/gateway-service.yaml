@@ -1,15 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "cupid.fullname" . }}-gateway
+  name: {{ include "cupid.fullname" . }}-gateway-service
   labels:
-    {{- include "cupid.labels" . | nindent 4 }}
+    app: {{ .Values.gateway.selectorLabel }}
 spec:
   type: {{ .Values.gateway.service.type }}
   ports:
     - port: {{ .Values.gateway.service.port }}
-      targetPort: http
+      nodePort:  {{ .Values.gateway.service.nodePort }}
       protocol: TCP
-      name: http
   selector:
-    {{- include "cupid.selectorLabels" . | nindent 4 }}
+    app: {{ .Values.gateway.selectorLabel }}

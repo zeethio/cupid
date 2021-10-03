@@ -1,15 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "cupid.fullname" . }}-messager
+  name: {{ include "cupid.fullname" . }}-messager-service
   labels:
-    {{- include "cupid.labels" . | nindent 4 }}
+    app: {{ .Values.messager.selectorLabel }}
 spec:
   type: {{ .Values.messager.service.type }}
   ports:
     - port: {{ .Values.messager.service.port }}
-      targetPort: http
+      nodePort:  {{ .Values.messager.service.nodePort }}
       protocol: TCP
-      name: http
   selector:
-    {{- include "cupid.selectorLabels" . | nindent 4 }}
+    app: {{ .Values.messager.selectorLabel }}

@@ -21,9 +21,10 @@ venus:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "v0.2"
+  selectorLabel: venus
   arguments:
     snapshot: https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car 
-    authUrl: http://localhost:8989
+    authUrl: cupid-auth-service
     repodir: /data/repodir
     paramdir: /proofparams
     bellmannogpu: "1"
@@ -58,6 +59,7 @@ auth:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "v0.1"
+  selectorLabel: auth
   arguments: 
     repo: /data/repo
   volumes:
@@ -87,6 +89,7 @@ gateway:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "v0.1"
+  selectorLabel: gateway
   arguments:
     authUrl: cupid-auth-service
   pool:
@@ -113,16 +116,12 @@ messager:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "v0.1"
+  selectorLabel: messager
   arguments:
-  - run 
-  - --auth-url
-  - http://localhost:8989 
-  - --node-url 
-  - /ip4/127.0.0.1/tcp/3453 
-  - --gateway-url
-  - /ip4/127.0.0.1/tcp/45132 
-  - --auth-token
-  - tokendata
+    authUrl: cupid-auth-service
+    nodeUrl: cupid-venus-service
+    gatewayUrl: cupid-gateway-service
+    authToken: todo-shared-admin-token
   pool:
     replicaCount: 1
     nodeSelector: {}
@@ -139,6 +138,7 @@ messager:
   service:
     type: NodePort
     port: 39812
+    nodePort: 30004
 
 
 miner:
@@ -147,6 +147,7 @@ miner:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "v0.1"
+  selectorLabel: miner
   arguments:
   - run
   pool:

@@ -3,14 +3,14 @@ kind: StatefulSet
 metadata:
   name: {{ include "cupid.fullname" . }}-gateway
   labels:
-    {{- include "cupid.labels" . | nindent 4 }}
+    app: {{ .Values.auth.selectorLabel }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.gateway.pool.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "cupid.selectorLabels" . | nindent 6 }}
+      app: {{ .Values.auth.selectorLabel }}
   serviceName: {{ include "cupid.fullname" . }}-gateway
   template:
     metadata:
@@ -19,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "cupid.selectorLabels" . | nindent 8 }}
+        app: {{ .Values.auth.selectorLabel }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

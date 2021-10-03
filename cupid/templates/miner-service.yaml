@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "cupid.fullname" . }}-miner
+  name: {{ include "cupid.fullname" . }}-miner-service
   labels:
-    {{- include "cupid.labels" . | nindent 4 }}
+    app: {{ .Values.miner.selectorLabel }}
 spec:
   type: {{ .Values.miner.service.type }}
   ports:
