@@ -34,7 +34,16 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.messager.image.repository }}:{{ .Values.messager.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.messager.image.pullPolicy }}
-          args: ["run", "--auth-url", {{ .Values.messager.arguments.authUrl }}, "--node-url",  {{ .Values.messager.arguments.nodeUrl }}, "--gateway-url",  {{ .Values.messager.arguments.gatewayUrl }}, "--auth-token",  {{ .Values.messager.arguments.authToken }}]
+          args: 
+          - "run" 
+          - "--auth-url"
+          - "http://{{ include "cupid.fullname" . }}-{{ .Values.miner.arguments.authUrl }}:{{ .Values.auth.service.port }}" 
+          - "--node-url"
+          - "/dns/{{ include "cupid.fullname" . }}-{{ .Values.miner.arguments.apiUrl }}/tcp/{{ .Values.venus.service.port }}"
+          - "--gateway-url" 
+          - "/dns/{{ include "cupid.fullname" . }}-{{ .Values.miner.arguments.gatewayUrl }}/tcp/{{ .Values.gateway.service.port }}"
+          - "--auth-token"  
+          - {{ .Values.messager.arguments.authToken }}]
           ports:
             - name: http
               containerPort: 3453
