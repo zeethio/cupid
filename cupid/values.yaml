@@ -24,7 +24,7 @@ venus:
   selectorLabel: venus
   arguments:
     snapshot: https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car 
-    authUrl: cupid-auth-service
+    authUrl: auth-service
     repodir: /data/repodir
     paramdir: /proofparams
     bellmannogpu: "1"
@@ -88,10 +88,10 @@ gateway:
     repository: zeethio/venus-gateway
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "v0.1"
+    tag: "v0.2"
   selectorLabel: gateway
   arguments:
-    authUrl: cupid-auth-service
+    authUrl: auth-service
   pool:
     replicaCount: 1
     nodeSelector: {}
@@ -115,13 +115,13 @@ messager:
     repository: zeethio/venus-messager
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "v0.1"
+    tag: "v0.2"
   selectorLabel: messager
   arguments:
-    authUrl: cupid-auth-service
-    nodeUrl: cupid-venus-service
-    gatewayUrl: cupid-gateway-service
-    authToken: todo-shared-admin-token
+    authUrl: auth-service
+    nodeUrl: venus-service
+    gatewayUrl: gateway-service
+    authToken: shared-admin-token
   pool:
     replicaCount: 1
     nodeSelector: {}
@@ -149,7 +149,10 @@ miner:
     tag: "v0.1"
   selectorLabel: miner
   arguments:
-  - run
+    authUrl: auth-service
+    apiUrl: venus-service
+    gatewayUrl: gateway-service
+    tokenAdmin: todo
   pool:
     replicaCount: 1
     nodeSelector: {}
@@ -166,6 +169,7 @@ miner:
   service:
     type: NodePort
     port: 39812
+    nodePort: 30005
 
 podAnnotations: {}
 

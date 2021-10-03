@@ -34,24 +34,27 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.miner.image.repository }}:{{ .Values.miner.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.miner.image.pullPolicy }}
-          args:          
-            {{-  range .Values.miner.arguments }}
-            - {{ . }}
-            {{- end }}
+          args: ["run"]
           ports:
             - name: http
-              containerPort: 3453
+              containerPort: 3454
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
           resources:
             {{- toYaml .Values.miner.agent.resources | nindent 12 }}
+      containers:
+        - name: {{ .Chart.Name }}-init
+          image: "{{ .Values.miner.image.repository }}:{{ .Values.miner.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.miner.image.pullPolicy }}
+          args: 
+          - "init" 
+          - "--auth-api" 
+          - "http://{{ include "cupid.fullname" . }}-{{ .Values.miner.arguments.authUrl }}:{{ .Values.venus.service.port }}"
+          - "--token" 
+          - {{ .Values.miner.arguments.tokenAdmin }}
+          - "--gateway-api" 
+          - "/dns/{{ include "cupid.fullname" . }}-{{ .Values.miner.arguments.gatewayUrl }}/tcp/{{ .Values.gateway.service.port }}"
+          - "--api" 
+          - "/dns/{{ include "cupid.fullname" . }}-{{ .Values.miner.arguments.apiUrl }}/tcp/{{ .Values.venus.service.port }}"
       {{- with .Values.miner.pool.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
