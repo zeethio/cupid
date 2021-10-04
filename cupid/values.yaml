@@ -6,6 +6,9 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+auth:
+  enabled: true
+
 authUrl: auth-service 
 authPort: 30001
 
