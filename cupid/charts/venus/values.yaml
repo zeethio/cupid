@@ -1,0 +1,76 @@
+# Default values for cupid.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: "venus"
+
+authUrl: http://auth:30001
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+image:
+  repository: zeethio/venus
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "v0.2"
+selectorLabel: venus
+arguments:
+  snapshot: https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car 
+  authUrl: auth-service
+  repodir: /data/repodir
+  paramdir: /proofparams
+  bellmannogpu: "1"
+  bellmanverifier: "cpu"
+volumes:
+  mountpathData: /data
+  mountpathProofParams: /proofparams
+
+pool:
+  replicaCount: 1
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  storage: 600Gi
+  paramStorage: 300Gi
+agent:
+  resources:
+    limits:
+      cpu: 8
+      memory: 128Gi
+    requests:
+      cpu: 4
+      memory: 96Gi
+service:
+  type: NodePort
+  nodePort: 30002
+  port: 3453
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+

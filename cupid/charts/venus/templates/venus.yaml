@@ -1,16 +1,16 @@
-{{- range untilStep 1 (int (add1 (int64 .Values.venus.pool.replicaCount))) 1 }}
+{{- range untilStep 1 (int (add1 (int64 .Values.pool.replicaCount))) 1 }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "cupid.fullname" $ }}-venus{{ . }}
+  name: {{ include "venus.fullname" $ }}-{{ . }}
   labels:
-    app: {{ $.Values.venus.selectorLabel }}
+    app: {{ $.Values.selectorLabel }}
 spec:
   replicas: 1 
   selector:
     matchLabels:
-      app: {{ $.Values.venus.selectorLabel }}
-  serviceName: {{ include "cupid.fullname" $ }}-venus{{ . }}
+      app: {{ $.Values.selectorLabel }}
+  serviceName: {{ include "venus.fullname" $ }}{{ . }}
   template:
     metadata:
       {{- with $.Values.podAnnotations }}
@@ -18,69 +18,69 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ $.Values.venus.selectorLabel }}
+        app: {{ $.Values.selectorLabel }}
     spec:
       {{- with $.Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "cupid.serviceAccountName" $ }}
+      serviceAccountName: {{ include "venus.serviceAccountName" $ }}
       securityContext:
         {{- toYaml $.Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ $.Chart.Name }}
           securityContext:
             {{- toYaml $.Values.securityContext | nindent 12 }}
-          image: "{{ $.Values.venus.image.repository }}:{{ $.Values.venus.image.tag | default $.Chart.AppVersion }}"
-          imagePullPolicy: {{ $.Values.venus.image.pullPolicy }}
-          args: ["--repodir", {{ $.Values.venus.arguments.repodir }}, "daemon", {{- if $.Values.venus.arguments.snapshot }} "--import-snapshot", {{ $.Values.venus.arguments.snapshot }},{{- end }} "--auth-url", {{ include "cupid.fullname" $ }}-auth-service ]
+          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          args: ["--repodir", {{ $.Values.arguments.repodir }}, "daemon", {{- if $.Values.arguments.snapshot }} "--import-snapshot", {{ $.Values.arguments.snapshot }},{{- end }} "--auth-url", {{ include "venus.fullname" $ }}-auth-service ]
           env:
             - name: FIL_PROOFS_PARAMETER_CACHE
-              value: {{ $.Values.venus.arguments.paramdir }}
+              value: {{ $.Values.arguments.paramdir }}
             - name: BELLMAN_NO_GPU 
-              value: "1" {{/* $.Values.venus.arguments.bellmannogpu */}}
+              value: "1" {{/* $.Values.arguments.bellmannogpu */}}
             - name: BELLMAN_VERIFIER 
-              value: "cpu" {{/* $.Values.venus.arguments.bellmanverifier */}}
+              value: "cpu" {{/* $.Values.arguments.bellmanverifier */}}
           ports:
             - name: http
-              containerPort: {{ $.Values.venus.service.port }}
+              containerPort: {{ $.Values.service.port }}
               protocol: TCP
 {{- /*
           readinessProbe:
             tcpSocket:
-              port: {{ $.Values.venus.service.port }}
+              port: {{ $.Values.service.port }}
             initialDelaySeconds: 60
             failureThreshold: 1
             periodSeconds: 10
           livenessProbe:
             tcpSocket:
-              port: {{ $.Values.venus.service.port }}
+              port: {{ $.Values.service.port }}
             initialDelaySeconds: 60
             failureThreshold: 1
             periodSeconds: 10
           startupProbe:
             tcpSocket:
-              port: {{ $.Values.venus.service.port }}
+              port: {{ $.Values.service.port }}
             initialDelaySeconds: 60
             failureThreshold: 360
             periodSeconds: 10
 */}}
           resources:
-            {{- toYaml $.Values.venus.agent.resources | nindent 12 }}
+            {{- toYaml $.Values.agent.resources | nindent 12 }}
           volumeMounts:
           - name: data
-            mountPath: {{ $.Values.venus.volumes.mountpathData }}
+            mountPath: {{ $.Values.volumes.mountpathData }}
           - name: proofparams
-            mountPath: {{ $.Values.venus.volumes.mountpathProofParams }}
-      {{- with $.Values.venus.pool.nodeSelector }}
+            mountPath: {{ $.Values.volumes.mountpathProofParams }}
+      {{- with $.Values.pool.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with $.Values.venus.pool.affinity }}
+      {{- with $.Values.pool.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with $.Values.venus.pool.tolerations }}
+      {{- with $.Values.pool.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -92,7 +92,7 @@ spec:
       storageClassName: venus
       resources:
         requests:
-          storage: {{ $.Values.venus.pool.storage }}
+          storage: {{ $.Values.pool.storage }}
   - metadata:
       name: proofparams
     spec:
@@ -100,5 +100,5 @@ spec:
       storageClassName: proofparams
       resources:
         requests:
-          storage: {{ $.Values.venus.pool.paramStorage }}
+          storage: {{ $.Values.pool.paramStorage }}
 {{- end }}

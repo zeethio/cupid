@@ -9,7 +9,7 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.selectorLabel }}
-  serviceName: {{ include "auth.fullname" . }}-auth
+  serviceName: {{ include "auth.fullname" . }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
