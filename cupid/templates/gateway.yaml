@@ -3,14 +3,14 @@ kind: StatefulSet
 metadata:
   name: {{ include "cupid.fullname" . }}-gateway
   labels:
-    app: {{ .Values.auth.selectorLabel }}
+    app: {{ .Values.gateway.selectorLabel }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.gateway.pool.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      app: {{ .Values.auth.selectorLabel }}
+      app: {{ .Values.gateway.selectorLabel }}
   serviceName: {{ include "cupid.fullname" . }}-gateway
   template:
     metadata:
@@ -19,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ .Values.auth.selectorLabel }}
+        app: {{ .Values.gateway.selectorLabel }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -34,21 +34,11 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.gateway.image.repository }}:{{ .Values.gateway.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.gateway.image.pullPolicy }}
-         {{/* args: ["--listen", "/ip4/0.0.0.0/tcp/"{{ .Values.gateway.service.port }}, "--auth-url", "http://"{{ .Values.gateway.arguments.authUrl }}
+          {{/* args: ["--listen", "/ip4/0.0.0.0/tcp/"{{ .Values.gateway.service.port }}, "--auth-url", "http://{{ .Values.authUrl }}:{{ .Values.authPort }}"] */}}
           ports:
             - name: http
               containerPort: {{ .Values.gateway.service.port }}
               protocol: TCP
-{{/*
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-*/}}
           resources:
             {{- toYaml .Values.gateway.agent.resources | nindent 12 }}
       {{- with .Values.gateway.pool.nodeSelector }}

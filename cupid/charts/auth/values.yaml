@@ -1,0 +1,45 @@
+# Default values for cupid.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+image:
+  repository: zeethio/venus-auth
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "v0.1"
+selectorLabel: auth
+arguments: 
+  repo: /data/repo
+volumes:
+  mountpathData: /data
+pool:
+  replicaCount: 1
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  storage: 1Gi
+agent:
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+service:
+  type: NodePort
+  nodePort: 30001
+  port: 8989

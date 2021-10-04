@@ -6,6 +6,9 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+authUrl: auth-service 
+authPort: 30001
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
@@ -52,36 +55,6 @@ venus:
     type: NodePort
     nodePort: 30002
     port: 3453
-
-auth:
-  image:
-    repository: zeethio/venus-auth
-    pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
-    tag: "v0.1"
-  selectorLabel: auth
-  arguments: 
-    repo: /data/repo
-  volumes:
-    mountpathData: /data
-  pool:
-    replicaCount: 1
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    storage: 1Gi
-  agent:
-    resources:
-      limits:
-        cpu: 100m
-        memory: 128Mi
-      requests:
-        cpu: 100m
-        memory: 128Mi
-  service:
-    type: NodePort
-    nodePort: 30001
-    port: 8989
 
 gateway:
   image:

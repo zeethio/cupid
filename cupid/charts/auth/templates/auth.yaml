@@ -1,17 +1,15 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "cupid.fullname" . }}-auth
+  name: {{ include "auth.fullname" . }}
   labels:
-    app: {{ .Values.auth.selectorLabel }}
+    app: {{ .Values.selectorLabel }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.auth.pool.replicaCount }}
-  {{- end }}
+  replicas: {{ .Values.pool.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Values.auth.selectorLabel }}
-  serviceName: {{ include "cupid.fullname" . }}-auth-service
+      app: {{ .Values.selectorLabel }}
+  serviceName: {{ include "cupid.fullname" . }}-auth
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,7 +17,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ .Values.auth.selectorLabel }}
+        app: {{ .Values.selectorLabel }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -32,9 +30,9 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.auth.image.repository }}:{{ .Values.auth.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.auth.image.pullPolicy }}
-          args: ["--repo", {{ $.Values.auth.arguments.repo }},  "run"]
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["--repo", {{ $.Values.arguments.repo }},  "run"]
           ports:
             - name: http
               containerPort: 8989
@@ -52,19 +50,19 @@ spec:
             initialDelaySeconds: 60
 */}}
           resources:
-            {{- toYaml .Values.auth.agent.resources | nindent 12 }}
+            {{- toYaml .Values.agent.resources | nindent 12 }}
           volumeMounts:
           - name: data
-            mountPath: {{ $.Values.auth.volumes.mountpathData }}
-      {{- with .Values.auth.pool.nodeSelector }}
+            mountPath: {{ $.Values.volumes.mountpathData }}
+      {{- with .Values.pool.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.auth.pool.affinity }}
+      {{- with .Values.pool.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.auth.pool.tolerations }}
+      {{- with .Values.pool.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -76,5 +74,5 @@ spec:
       accessModes: ["ReadWriteMany"]
       resources:
         requests:
-          storage: {{ $.Values.auth.pool.storage }}
+          storage: {{ $.Values.pool.storage }}
 
