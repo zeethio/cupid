@@ -33,7 +33,16 @@ spec:
             {{- toYaml $.Values.securityContext | nindent 12 }}
           image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
           imagePullPolicy: {{ $.Values.image.pullPolicy }}
-          args: ["--repodir", {{ $.Values.arguments.repodir }}, "daemon", {{- if $.Values.arguments.snapshot }} "--import-snapshot", {{ $.Values.arguments.snapshot }},{{- end }} "--auth-url", {{ include "venus.fullname" $ }}-auth-service ]
+          args: 
+          - "--repodir" 
+          - {{ $.Values.arguments.repodir }}
+          - "daemon" 
+          {{- if $.Values.arguments.snapshot }} 
+          - "--import-snapshot" 
+          - {{ $.Values.arguments.snapshot }}
+          {{- end }} 
+          - "--auth-url" 
+          - {{ $.Values.arguments.authUrl }}
           env:
             - name: FIL_PROOFS_PARAMETER_CACHE
               value: {{ $.Values.arguments.paramdir }}

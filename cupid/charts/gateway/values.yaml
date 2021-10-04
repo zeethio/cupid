@@ -4,7 +4,7 @@
 
 imagePullSecrets: []
 nameOverride: ""
-fullnameOverride: "venus"
+fullnameOverride: "gateway"
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -16,41 +16,30 @@ serviceAccount:
   name: ""
 
 image:
-  repository: zeethio/venus
+  repository: zeethio/venus-gateway
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "v0.2"
-selectorLabel: venus
+selectorLabel: gateway
 arguments:
-  snapshot: https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car 
-  authUrl:  http://auth:30001
-  repodir: /data/repodir
-  paramdir: /proofparams
-  bellmannogpu: "1"
-  bellmanverifier: "cpu"
-volumes:
-  mountpathData: /data
-  mountpathProofParams: /proofparams
-
+  authUrl: http://auth:3001
 pool:
   replicaCount: 1
   nodeSelector: {}
   tolerations: []
   affinity: {}
-  storage: 600Gi
-  paramStorage: 300Gi
 agent:
   resources:
     limits:
-      cpu: 8
-      memory: 128Gi
+      cpu: 1000m
+      memory: 128Mi
     requests:
-      cpu: 4
-      memory: 96Gi
+      cpu: 1000m
+      memory: 128Mi
 service:
   type: NodePort
-  nodePort: 30002
-  port: 3453
+  port: 45132
+  nodePort: 30003
 
 podAnnotations: {}
 
