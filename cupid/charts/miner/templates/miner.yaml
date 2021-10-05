@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "miner.fullname" . }}
+  labels:
+    app: {{ .Values.selectorLabel }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.pool.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ .Values.selectorLabel }}
+  serviceName: {{ include "miner.fullname" . }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ .Values.selectorLabel }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "miner.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["run"]
+          ports:
+            - name: http
+              containerPort: 3454
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.agent.resources | nindent 12 }}
+      containers:
+        - name: {{ .Chart.Name }}-init
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: 
+          - "init" 
+          - "--auth-api" 
+          - {{ .Values.arguments.authUrl }}
+          - "--gateway-api" 
+          - {{ .Values.arguments.gatewayUrl }}
+          - "--api" 
+          - {{ .Values.arguments.nodeUrl }}
+          - "--token" 
+          - "$(ADMIN_TOKEN)"
+          env:
+          - name: ADMIN_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: tokens
+                key: adminToken
+
+      {{- with .Values.pool.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.pool.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.pool.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
