@@ -1,0 +1,66 @@
+# Default values for cupid.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: "messager"
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+image:
+  repository: zeethio/venus-messager
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "v0.2"
+selectorLabel: messager
+arguments:
+  authUrl: http://auth:30001
+  nodeUrl: /dns/venus/tcp/30002
+  gatewayUrl: /dns/gateway/tcp/30003
+  authToken: todo-replace-during-instal
+pool:
+  replicaCount: 1
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+agent:
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 128Mi
+    requests:
+      cpu: 1000m
+      memory: 128Mi
+service:
+  type: NodePort
+  port: 39812
+  nodePort: 30004
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+

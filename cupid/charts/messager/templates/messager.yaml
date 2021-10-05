@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "cupid.fullname" . }}-messager
+  name: {{ include "messager.fullname" . }}
   labels:
-    app: {{ .Values.messager.selectorLabel }}
+    app: {{ .Values.selectorLabel }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.messager.pool.replicaCount }}
+  replicas: {{ .Values.pool.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      app: {{ .Values.messager.selectorLabel }}
-  serviceName: {{ include "cupid.fullname" . }}-messager
+      app: {{ .Values.selectorLabel }}
+  serviceName: {{ include "messager.fullname" . }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,31 +19,37 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ .Values.messager.selectorLabel }}
+        app: {{ .Values.selectorLabel }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "cupid.serviceAccountName" . }}
+      serviceAccountName: {{ include "messager.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.messager.image.repository }}:{{ .Values.messager.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.messager.image.pullPolicy }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           args: 
           - "run" 
           - "--auth-url"
-          - "http://{{ include "cupid.fullname" . }}-{{ .Values.authUrl }}:{{ .Values.authPort }}" 
+          - {{ .Values.arguments.authUrl }} 
           - "--node-url"
-          - "/dns/{{ include "cupid.fullname" . }}-{{ .Values.miner.arguments.apiUrl }}/tcp/{{ .Values.venus.service.port }}"
+          - {{ .Values.arguments.nodeUrl }}
           - "--gateway-url" 
-          - "/dns/{{ include "cupid.fullname" . }}-{{ .Values.miner.arguments.gatewayUrl }}/tcp/{{ .Values.gateway.service.port }}"
+          - {{ .Values.arguments.gatewayUrl }}
           - "--auth-token"  
-          - {{ .Values.messager.arguments.authToken }}]
+          - "$(ADMIN_TOKEN)"
+          env:
+          - name: ADMIN_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: tokens
+                key: adminToken
           ports:
             - name: http
               containerPort: 3453
@@ -59,16 +65,16 @@ spec:
               port: http
 */}}
           resources:
-            {{- toYaml .Values.messager.agent.resources | nindent 12 }}
-      {{- with .Values.messager.pool.nodeSelector }}
+            {{- toYaml .Values.agent.resources | nindent 12 }}
+      {{- with .Values.pool.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.messager.pool.affinity }}
+      {{- with .Values.pool.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.messager.pool.tolerations }}
+      {{- with .Values.pool.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
