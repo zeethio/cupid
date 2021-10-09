@@ -28,9 +28,9 @@ image:
   tag: "v0.1"
 selectorLabel: miner
 arguments:
-  authUrl: http://auth:30001
-  nodeUrl: /dns/venus/tcp/30002
-  gatewayUrl: /dns/gateway/tcp/30003
+  authUrl: http://auth:8989
+  nodeUrl: /dns/venus/tcp/3453
+  gatewayUrl: /dns/gateway/tcp/45132
   authToken: todo-replace-during-instal
 
 pool:

@@ -3,12 +3,12 @@ kind: StatefulSet
 metadata:
   name: {{ include "auth.fullname" . }}
   labels:
-    app: {{ .Values.selectorLabel }}
+    {{- include "auth.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.pool.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Values.selectorLabel }}
+      {{- include "auth.selectorLabels" . | nindent 6 }}
   serviceName: {{ include "auth.fullname" . }}
   template:
     metadata:
@@ -17,7 +17,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ .Values.selectorLabel }}
+        {{- include "auth.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

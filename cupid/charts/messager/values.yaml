@@ -22,10 +22,9 @@ image:
   tag: "v0.4"
 selectorLabel: messager
 arguments:
-  authUrl: http://auth:30001
-  nodeUrl: /dns/venus/tcp/30002
-  gatewayUrl: /dns/gateway/tcp/30003
-  authToken: todo-replace-during-instal
+  authUrl: http://auth:8989
+  nodeUrl: /dns/venus/tcp/3453
+  gatewayUrl: /dns/gateway/tcp/45132
 pool:
   replicaCount: 1
   nodeSelector: {}

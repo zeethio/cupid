@@ -4,12 +4,12 @@ kind: StatefulSet
 metadata:
   name: {{ include "venus.fullname" $ }}-{{ . }}
   labels:
-    app: {{ $.Values.selectorLabel }}
+    {{- include "venus.labels" $ | nindent 4 }}
 spec:
   replicas: 1 
   selector:
     matchLabels:
-      app: {{ $.Values.selectorLabel }}
+      {{- include "venus.selectorLabels" $ | nindent 6 }}
   serviceName: {{ include "venus.fullname" $ }}{{ . }}
   template:
     metadata:
@@ -18,7 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ $.Values.selectorLabel }}
+        {{- include "venus.selectorLabels" $ | nindent 8 }}
     spec:
       {{- with $.Values.imagePullSecrets }}
       imagePullSecrets:
@@ -36,6 +36,8 @@ spec:
           args: 
           - "--repodir" 
           - {{ $.Values.arguments.repodir }}
+          - "--cmdapiaddr"
+          - {{ $.Values.arguments.cmdapiaddr }}
           - "daemon" 
           {{- if $.Values.arguments.snapshot }} 
           - "--import-snapshot" 

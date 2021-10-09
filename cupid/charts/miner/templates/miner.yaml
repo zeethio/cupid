@@ -3,14 +3,14 @@ kind: StatefulSet
 metadata:
   name: {{ include "miner.fullname" . }}
   labels:
-    app: {{ .Values.selectorLabel }}
+    {{- include "miner.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.pool.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      app: {{ .Values.selectorLabel }}
+      {{- include "miner.selectorLabels" . | nindent 6 }}
   serviceName: {{ include "miner.fullname" . }}
   template:
     metadata:
@@ -19,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ .Values.selectorLabel }}
+        {{- include "miner.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

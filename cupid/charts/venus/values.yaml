@@ -25,6 +25,7 @@ arguments:
   snapshot: /data/minimal_finality_stateroots_latest.car
   authUrl:  http://auth:30001
   repodir: /data/repodir
+  cmdapiaddr: /ip4/0.0.0.0/tcp/3453
   paramdir: /data/filecoin-proof-parameters
   bellmannogpu: "1"
   bellmanverifier: "cpu"
@@ -50,6 +51,7 @@ service:
   type: NodePort
   nodePort: 30002
   port: 3453
+  targetPort: 3453
 
 podAnnotations: {}
 
