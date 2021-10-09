@@ -17,4 +17,4 @@ RUN  git clone https://github.com/filecoin-project/venus-messager.git && \
      make
 
 EXPOSE 39812
-ENTRYPOINT ["/app/venus-messager/venus-messager", "run"]
+ENTRYPOINT ["/app/venus-messager/venus-messager"]

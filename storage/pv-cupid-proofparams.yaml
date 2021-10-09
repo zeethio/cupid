@@ -8,11 +8,11 @@ spec:
   volumeMode: Filesystem
   storageClassName: proofparams
   accessModes:
-   - ReadOnlyMany
+   - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   mountOptions:
     - hard
     - nfsvers=4.1
   nfs:
-    path: /var/tmp/filecoin-proof-parameters
+    path: /media/ssd1/nfs/cupid/paramcache
     server: 66.220.22.35

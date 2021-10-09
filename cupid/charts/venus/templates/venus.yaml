@@ -79,8 +79,6 @@ spec:
           volumeMounts:
           - name: data
             mountPath: {{ $.Values.volumes.mountpathData }}
-          - name: proofparams
-            mountPath: {{ $.Values.volumes.mountpathProofParams }}
       {{- with $.Values.pool.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -97,17 +95,9 @@ spec:
   - metadata:
       name: data
     spec:
-      accessModes: ["ReadWriteMany"]
-      storageClassName: venus
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: cupid-local-miner5
       resources:
         requests:
           storage: {{ $.Values.pool.storage }}
-  - metadata:
-      name: proofparams
-    spec:
-      accessModes: ["ReadOnlyMany"]
-      storageClassName: proofparams
-      resources:
-        requests:
-          storage: {{ $.Values.pool.paramStorage }}
 {{- end }}

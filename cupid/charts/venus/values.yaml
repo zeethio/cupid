@@ -22,15 +22,14 @@ image:
   tag: "v0.2"
 selectorLabel: venus
 arguments:
-  snapshot: https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car 
+  snapshot: /data/minimal_finality_stateroots_latest.car
   authUrl:  http://auth:30001
   repodir: /data/repodir
-  paramdir: /proofparams
+  paramdir: /data/filecoin-proof-parameters
   bellmannogpu: "1"
   bellmanverifier: "cpu"
 volumes:
   mountpathData: /data
-  mountpathProofParams: /proofparams
 
 pool:
   replicaCount: 1
