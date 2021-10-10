@@ -34,14 +34,17 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args: ["run"]
+          args: ["--miner-repo", "/root/.venusminer", "run"]
           ports:
             - name: http
               containerPort: 3454
               protocol: TCP
           resources:
             {{- toYaml .Values.agent.resources | nindent 12 }}
-      containers:
+          volumeMounts:
+          - mountPath: /root/.venusminer
+            name: miner-repo
+      initContainers:
         - name: {{ .Chart.Name }}-init
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -54,6 +57,8 @@ spec:
           - "--api" 
           - {{ .Values.arguments.nodeUrl }}
           - "--token" 
+          - "$(NODE_TOKEN)"
+          - "--auth-token"
           - "$(ADMIN_TOKEN)"
           env:
           - name: ADMIN_TOKEN
@@ -61,6 +66,14 @@ spec:
               secretKeyRef:
                 name: tokens
                 key: adminToken
+          - name: NODE_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: tokens
+                key: nodeToken
+          volumeMounts:
+          - mountPath: /root/.venusminer
+            name: miner-repo
 
       {{- with .Values.pool.nodeSelector }}
       nodeSelector:
@@ -74,3 +87,6 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+      - emptyDir: {}
+        name: miner-repo

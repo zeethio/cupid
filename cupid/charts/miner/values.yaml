@@ -6,11 +6,6 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: "miner"
 
-auth:
-  enabled: true
-
-authUrl: auth-service 
-authPort: 30001
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -29,9 +24,8 @@ image:
 selectorLabel: miner
 arguments:
   authUrl: http://auth:8989
-  nodeUrl: /dns/venus/tcp/3453
+  nodeUrl: /dns/venus/tcp/3453/http
   gatewayUrl: /dns/gateway/tcp/45132
-  authToken: todo-replace-during-instal
 
 pool:
   replicaCount: 1
