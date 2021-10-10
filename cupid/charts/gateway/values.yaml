@@ -22,7 +22,7 @@ image:
   tag: "v0.2"
 selectorLabel: gateway
 arguments:
-  authUrl: http://auth:3001
+  authUrl: http://auth:8989
 pool:
   replicaCount: 1
   nodeSelector: {}

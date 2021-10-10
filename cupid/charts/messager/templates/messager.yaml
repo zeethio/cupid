@@ -44,12 +44,19 @@ spec:
           - {{ .Values.arguments.gatewayUrl }}
           - "--auth-token"  
           - "$(ADMIN_TOKEN)"
+          - "--node-token"  
+          - "$(NODE_TOKEN)"
           env:
           - name: ADMIN_TOKEN
             valueFrom:
               secretKeyRef:
                 name: tokens
                 key: adminToken
+          - name: NODE_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: tokens
+                key: nodeToken
           ports:
             - name: http
               containerPort: 3453
