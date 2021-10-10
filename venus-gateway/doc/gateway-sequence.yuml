@@ -1,0 +1,54 @@
+// {type:sequence}
+// {generate:true}
+
+[App]MakeToken>[App]
+[App]secKey.>[App]
+[App]jwtclient.NewJWTClient>[:authClient]
+[App]NewProofEventStream(cli)>[:ProofEventStream]
+[App]NewWalletEventStream>[:WalletEventStream]
+[App]mux.NewRouter>[App]
+[App]WarpIJwtAuthClient>[App]
+[App]jwtclient.NewAuthMux>[App]
+[App]NewMultiaddr>[App]
+[App]manet.Listen>[App]
+[App]jsonrpc.NewServer>[App]
+
+
+[:Venus-Sealer]->[note: Venus-Sealer ProofEventClient]
+[:Venus-Sealer]ListenProofEvent>[:ProofEventStream]
+[:ProofEventStream]proofEventCh.>[:Venus-Sealer]
+
+[:ProofEventStream]CtxGetTokenLocation>[:ProofEventStream]
+[:ProofEventStream]HasMiner>[:authClient]
+[:authClient]Result.>[:ProofEventStream]
+[:ProofEventStream]NewChannelInfo>[:ProofEventStream]
+
+[:ProofEventStream]addChanel>[:ProofEventStream]
+[:ProofEventStream]InitConnect>[:Venus-Sealer]
+[:Venus-Sealer]Result.>[:ProofEventStream]
+
+[:Venus-Wallet]ListenWalletEvent>[:WalletEventStream]
+[:WalletEventStream]CtxGetTokenLocation>[:WalletEventStream]
+[:WalletEventStream]newWalletChannelInfo>[:WalletEventStream]
+[:WalletEventStream]AddNewConn>[:WalletEventStream]
+[:WalletEventStream]walletEventCh.>[:Venus-Wallet]
+[:WalletEventStream]InitConnect>[:Venus-Wallet]
+[:WalletEventStream]WalletList>[:Venus-Wallet]
+[:Venus-Wallet]ListenWalletEvent>[:WalletEventStream]
+[:WalletEventStream]verifyAddress>[:WalletEventStream]
+
+
+[:Venus-Miner]ComputeProof>[:ProofEventStream]
+[:ProofEventStream]ComputeProof>[:Venus-Sealer]
+[:Venus-Sealer]ResponseProofEvent proofBytes.>[:ProofEventStream]
+[:ProofEventStream]Reuslt.>[:Venus-Miner]
+
+
+[:Venus-Miner]WalletSign>[:WalletEventStream]
+
+[:WalletEventStream]WalletSign>[:Venus-Wallet]
+[:Venus-Wallet]esult.>[:WalletEventStream]
+[:WalletEventStream]WalletSign>[:Venus-Miner]
+
+//HasPerm
+//PermissionProxy
