@@ -1,0 +1,19 @@
+// {type:sequence}
+// {generate:true}
+
+[App]cfg.JWT=genSecret()>[App]
+//[App]client=NewNodeClient>[App]
+[App]fx.Invoke(service.StartNodeEvents)>[App]
+[App]StartPushMessage>[MessagerService]
+[App]listenHeadChangesOnce>[NodeEvents]
+[App]start>[NodeEvents]
+[NodeEvents]listenHeadChangesOnce>[NodeEvents]
+[App]fx.Invoke(fx.Invoke(api.RunAPI)>[App]
+[App]gatewayProvider=gateway.NewWalletClient()>[App]
+
+[MessagerService]refresh>[MessageService]
+
+[Venus-Sealer]PushMessage>[MessageService]
+
+//listenHeadChangesOnce
+//notifs=ChainNotify
