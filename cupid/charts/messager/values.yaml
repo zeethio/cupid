@@ -19,12 +19,12 @@ image:
   repository: zeethio/venus-messager
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v0.4"
+  tag: "v0.5"
 selectorLabel: messager
 arguments:
   authUrl: http://auth:8989
-  nodeUrl: /dns/venus/tcp/3453
-  gatewayUrl: /dns/gateway/tcp/45132
+  nodeUrl: http://venus/tcp/3453
+  gatewayUrl: http://gateway/tcp/45132
 pool:
   replicaCount: 1
   nodeSelector: {}

@@ -52,6 +52,7 @@ spec:
               value: "1" {{/* $.Values.arguments.bellmannogpu */}}
             - name: BELLMAN_VERIFIER 
               value: "cpu" {{/* $.Values.arguments.bellmanverifier */}}
+
           ports:
             - name: http
               containerPort: {{ $.Values.service.port }}

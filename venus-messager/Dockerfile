@@ -13,7 +13,6 @@ ENV PATH=$PATH:/usr/local/go/bin
 WORKDIR '/app'
 RUN  git clone https://github.com/filecoin-project/venus-messager.git && \
      cd venus-messager && \
-     git checkout incubation && \
      make
 
 EXPOSE 39812
