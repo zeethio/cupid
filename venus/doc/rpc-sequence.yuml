@@ -1,0 +1,21 @@
+// {type:sequence}
+// {generate:true}
+
+//[note: An infromal use of UML sequence diagram to represent rpc call chain]
+[builder]nd.remoteAuth=jwtauth.NewRemoteAuth>[builder]
+[builder]NewRateLimitHandler>[builder]
+[Node]>[note: RunRPCAndWait .{bg:beige}]
+[Node]mux=NewServeMux>[Node]
+[Node]runRestfulAPI>[Node]
+[Node]>[RestfulAPI]
+[runRestfulAPI]>[note: serves "/api" {bg:beige}]
+[Node]runJsonrpcAPI>[Node]
+[Node]>[JsonrpcAPI]
+[JsonrpcAPI]>[note: serves "/rpc/v0","/rpc/v1" {bg:beige}]
+
+[Node]localVerifer=jwtauth.NewJwtAuth>[Node]
+[Node]loadAPISecret>[jwtAuth]
+[jwtAuth]>[note: implementation pkg/jwtauth/local_jwt.go  {bg:beige}]
+[jwtAuth]>[note: Read existing key or create a new one {bg:beige}]
+
+ [Node]authMux=jwtclient.NewAuthMux>[Node]
