@@ -90,11 +90,11 @@
 <!-- A6 -->
 <g id="node7" class="node">
 <title>A6</title>
-<polygon fill="none" stroke="#000000" points="97.9944,-118 16.5317,-118 12.5317,-114 12.5317,-82 93.9944,-82 97.9944,-86 97.9944,-118"/>
+<polygon fill="#0000ff" stroke="#000000" points="97.9944,-118 16.5317,-118 12.5317,-114 12.5317,-82 93.9944,-82 97.9944,-86 97.9944,-118"/>
 <polyline fill="none" stroke="#000000" points="93.9944,-114 12.5317,-114 "/>
 <polyline fill="none" stroke="#000000" points="93.9944,-114 93.9944,-82 "/>
 <polyline fill="none" stroke="#000000" points="93.9944,-114 97.9944,-118 "/>
-<text text-anchor="middle" x="55.263" y="-97" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">venus&#45;sealer</text>
+<text text-anchor="middle" x="55.263" y="-97" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#ffffff">venus&#45;sealer</text>
 </g>
 <!-- A1&#45;&gt;A6 -->
 <g id="edge16" class="edge">
@@ -135,11 +135,11 @@
 <!-- A8 -->
 <g id="node9" class="node">
 <title>A8</title>
-<polygon fill="none" stroke="#000000" points="468.8242,-204 389.7019,-204 385.7019,-200 385.7019,-168 464.8242,-168 468.8242,-172 468.8242,-204"/>
+<polygon fill="#0000ff" stroke="#000000" points="468.8242,-204 389.7019,-204 385.7019,-200 385.7019,-168 464.8242,-168 468.8242,-172 468.8242,-204"/>
 <polyline fill="none" stroke="#000000" points="464.8242,-200 385.7019,-200 "/>
 <polyline fill="none" stroke="#000000" points="464.8242,-200 464.8242,-168 "/>
 <polyline fill="none" stroke="#000000" points="464.8242,-200 468.8242,-204 "/>
-<text text-anchor="middle" x="427.263" y="-183" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">venus&#45;wallet</text>
+<text text-anchor="middle" x="427.263" y="-183" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#ffffff">venus&#45;wallet</text>
 </g>
 <!-- A2&#45;&gt;A8 -->
 <g id="edge11" class="edge">
@@ -207,11 +207,11 @@
 <!-- A12 -->
 <g id="node13" class="node">
 <title>A12</title>
-<polygon fill="none" stroke="#000000" points="99.264,-36 15.262,-36 11.262,-32 11.262,0 95.264,0 99.264,-4 99.264,-36"/>
+<polygon fill="#0000ff" stroke="#000000" points="99.264,-36 15.262,-36 11.262,-32 11.262,0 95.264,0 99.264,-4 99.264,-36"/>
 <polyline fill="none" stroke="#000000" points="95.264,-32 11.262,-32 "/>
 <polyline fill="none" stroke="#000000" points="95.264,-32 95.264,0 "/>
 <polyline fill="none" stroke="#000000" points="95.264,-32 99.264,-36 "/>
-<text text-anchor="middle" x="55.263" y="-15" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">venus&#45;worker</text>
+<text text-anchor="middle" x="55.263" y="-15" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#ffffff">venus&#45;worker</text>
 </g>
 <!-- A6&#45;&gt;A12 -->
 <g id="edge18" class="edge">

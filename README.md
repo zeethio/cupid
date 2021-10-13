@@ -66,9 +66,8 @@ arguments:
 helm install cupid-venus cupid/charts/venus
 ```
 
-Install Helm charts for all the venus services
+Install Helm charts for all the remaining venus services
 ```
-helm install cupid-venus cupid/charts/venus
 helm install cupid-gateway cupid/charts/gateway
 helm install cupid-messager cupid/charts/messager
 helm install cupid-miner cupid/charts/miner
