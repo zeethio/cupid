@@ -19,3 +19,7 @@
 [jwtAuth]>[note: Read existing key or create a new one {bg:beige}]
 
  [Node]authMux=jwtclient.NewAuthMux>[Node]
+ [jwtAuth]>[RemoteAuth]
+ [AuthMux]ServeHTTP>[AuthMux]
+ [AuthMux]token=r.Header.Get("Authorization")>[AuthMux]
+ [AuthMux]r.FormValue("token")>[AuthMux]
