@@ -4,5 +4,5 @@ metadata:
   name: cupid-configmap 
 data:
   authUrl: http://auth:8989
-  nodeUrl: http://venus/tcp/3453
-  gatewayUrl: http://gateway/tcp/45132
+  nodeUrl: http://venus:3453
+  gatewayUrl: http://venus:3453
