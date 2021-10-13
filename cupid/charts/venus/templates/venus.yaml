@@ -44,7 +44,7 @@ spec:
           - {{ $.Values.arguments.snapshot }}
           {{- end }} 
           - "--auth-url" 
-          - {{ $.Values.arguments.authUrl }}
+          - "$(AUTH_URL)"
           env:
             - name: FIL_PROOFS_PARAMETER_CACHE
               value: {{ $.Values.arguments.paramdir }}
@@ -52,6 +52,11 @@ spec:
               value: "1" {{/* $.Values.arguments.bellmannogpu */}}
             - name: BELLMAN_VERIFIER 
               value: "cpu" {{/* $.Values.arguments.bellmanverifier */}}
+            - name: AUTH_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: cupid-configmap
+                  key: authUrl
 
           ports:
             - name: http

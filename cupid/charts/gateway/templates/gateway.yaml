@@ -39,11 +39,18 @@ spec:
           -  "/ip4/0.0.0.0/tcp/{{ .Values.service.port }}"
           - "run"
           -  "--auth-url"
-          -  {{  .Values.arguments.authUrl }}
+          - "$(AUTH_URL)"
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          env:
+          - name: AUTH_URL
+            valueFrom:
+              configMapKeyRef:
+                name: cupid-configmap
+                key: authUrl
+
           resources:
             {{- toYaml .Values.agent.resources | nindent 12 }}
       {{- with .Values.pool.nodeSelector }}

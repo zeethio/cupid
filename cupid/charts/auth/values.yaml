@@ -40,6 +40,4 @@ agent:
       cpu: 100m
       memory: 128Mi
 service:
-  type: NodePort
-  nodePort: 30001
   port: 8989

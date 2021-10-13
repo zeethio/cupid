@@ -8,7 +8,8 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      nodePort:  {{ .Values.service.nodePort }}
+      targetPort: {{ .Values.service.port }}
       protocol: TCP
+  clusterIP: None
   selector:
     {{- include "auth.selectorLabels" . | nindent 4 }}

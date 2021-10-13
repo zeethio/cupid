@@ -51,11 +51,11 @@ spec:
           args: 
           - "init" 
           - "--auth-api" 
-          - {{ .Values.arguments.authUrl }}
+          - "$(AUTH_URL)" 
           - "--gateway-api" 
-          - {{ .Values.arguments.gatewayUrl }}
+          - "$(GATEWAY_URL)"
           - "--api" 
-          - {{ .Values.arguments.nodeUrl }}
+          - "$(NODE_URL)" 
           - "--token" 
           - "$(NODE_TOKEN)"
           - "--auth-token"
@@ -71,6 +71,21 @@ spec:
               secretKeyRef:
                 name: tokens
                 key: nodeToken
+          - name: AUTH_URL
+            valueFrom:
+              configMapKeyRef:
+                name: cupid-configmap
+                key: authUrl
+          - name: GATEWAY_URL
+            valueFrom:
+              configMapKeyRef:
+                name: cupid-configmap
+                key: gatewayUrl
+          - name: NODE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: cupid-configmap
+                key: nodeUrl
           volumeMounts:
           - mountPath: /root/.venusminer
             name: miner-repo

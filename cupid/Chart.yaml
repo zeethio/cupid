@@ -25,6 +25,17 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: auth
-    condition: auth.disabled
+    condition: auth.enabled
+    repository: file://charts/auth
   - name: venus
-    condition: venus.disabled
+    condition: venus.enabled
+    repository: file://charts/venus
+  - name: gateway
+    condition: gateway.enabled
+    repository: file://charts/gateway
+  - name: messager
+    condition: messager.enabled
+    repository: file://charts/messager
+  - name: miner
+    condition: miner.enabled
+    repository: file://charts/miner
