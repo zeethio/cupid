@@ -66,11 +66,6 @@ spec:
               secretKeyRef:
                 name: tokens
                 key: adminToken
-          - name: NODE_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: tokens
-                key: nodeToken
           - name: AUTH_URL
             valueFrom:
               configMapKeyRef:

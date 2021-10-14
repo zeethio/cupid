@@ -15,4 +15,4 @@ spec:
     - nfsvers=4.1
   nfs:
     path: /media/ssd1/nfs/cupid/auth
-    server: 66.220.22.35
+    server: miner5
