@@ -5,7 +5,7 @@
 </p>
 
  <br/><br/>
-### Venus service cluster deployment with kubernetes/helm charts (Under Development). <br/><em>Venus services provide shared infrastructure for Filecoin storage providers, a form of storage pooling that reduces cost of operation. Visit https://venus.filecoin.io/ for the official documentaion of the Venus project</em>.
+### Venus service cluster deployment with kubernetes/helm charts (Under Development). <br/><br/><em>Venus Chain Services provide shared infrastructure for Filecoin storage providers, a form of storage pooling that reduces cost of operation. Visit https://venus.filecoin.io/ for the official documentaion of the Venus project</em>.<br/><br/>
 
 This repo contains experimental Kubernetes/Helm charts to deploy the venus services. It may be helpful for the storage providers exiting from the venus incubation program to setup their own service maintain it easily.
 
