@@ -5,9 +5,9 @@
 </p>
 
  <br/><br/>
-### Venus service cluster deployment with kubernetes/helm charts (Under Development). <br/>Venus services provide shared infrastructure for Filecoin storage providers, a form of storage pooling that reduces cost of operation. Visit https://venus.filecoin.io/ for the official documentaion of the Venus project.
+### Venus service cluster deployment with kubernetes/helm charts (Under Development). <br/><em>Venus services provide shared infrastructure for Filecoin storage providers, a form of storage pooling that reduces cost of operation. Visit https://venus.filecoin.io/ for the official documentaion of the Venus project</em>.
 
-This repo contains experimental Kubernetes/Helm charts to deploy the venus services. It may be helpful for the storage providers exiting from the venus incubation program to setup their own service.
+This repo contains experimental Kubernetes/Helm charts to deploy the venus services. It may be helpful for the storage providers exiting from the venus incubation program to setup their own service maintain it easily.
 
  <br/><br/>
 <p align="center">
@@ -79,9 +79,9 @@ helm install cupid-messager cupid/charts/messager
 helm install cupid-miner cupid/charts/miner
 ```
 
-## Enabling access to a venus-sealer
-
-Example user:zeethio miner:t01192664
+## Configuring venus-sealer, venus-wallet to use the Venus Chain Serivces
+An account name and miner-id are used to generate authentication tokens to give access to the Venus Chain Services. The tokens are generated using venus-auth and configured in the venus-sealer and venus-wallet configuration files. We give an example configuration and steps below: 
+Example user account name: zeethio,  miner id: t01192664
 ```
 kubectl exec --tty --stdin auth-0  -- /app/venus-auth/venus-auth --repo /data/repo user add --name zeethio --miner=t01192664
 ```
