@@ -15,17 +15,17 @@ This repo contains experimental Kubernetes/Helm charts to deploy the venus servi
 </p>
  <br/><br/>
 
-Note: The information presented in this repo is informal and the purpose is to help undertand the organization of kuberneted/helm charts used for deployment of venus services. 
+Note: The information presented in this repo is informal and the purpose is to help undertand the organization of kubernetes/Helm charts used for deployment of venus services. 
 For offical documentation of venus services and architecture vist:  
 https://venus.filecoin.io/guide/
 ## Prerequisites:
 
-- kubernetes (v 1.22 or above) cluster with nodes suitable for running venus(requires > 2TiB of storage) and other modules. Refere the venus documentation of recommeded HW for running the Venus services (https://venus.filecoin.io/master/Chain_service_construction.html#chain-services)
+- kubernetes (v 1.22 or above) cluster with nodes suitable for running venus(requires > 2TiB of storage) and other modules. Refer the venus documentation of recommended HW for running the Venus services (https://venus.filecoin.io/master/Chain_service_construction.html#chain-services)
 
 - Helm v3
 ## Repo organization:
-- cupid/cupid repo is an umbrella helm chart that contains a separate subchart for each venus module. For example cupid/cupid/charts/venus contains help sub chart for installing venus module.
-- The docker files for various venus submodules are located in subfolders with names corresponding to the git repo names i.e. cupid/venus, cupid/venus-auth, cupid/venus-messager, cupid/venus-gateway and cupid/venus-miner. Modify the git repo checkout command in the Docker file to the required release tag of the module. Currently the Docker file includes build instructions from the venus deployment guide (https://venus.filecoin.io/guide/How-To-Deploy-MingPool.html). Needs tpo remove build intermediaries to reduce image size.
+- cupid/cupid repo is an umbrella Helm chart that contains a seperate subchart for each venus module. For example cupid/cupid/charts/venus contains Helm sub chart for installing venus module.
+- The docker files for various venus submodules are located in subfolders with names corresponding to the git repo names i.e. cupid/venus, cupid/venus-auth, cupid/venus-messager, cupid/venus-gateway and cupid/venus-miner. Modify the git repo checkout command in the Docker file to the required release tag of the module. Currently the Docker file includes build instructions from the venus deployment guide (https://venus.filecoin.io/guide/How-To-Deploy-MingPool.html). We need to remove build intermediaries to reduce image size.
 - helm charts are located in the cupid/charts folder as subcharts. Currently the charts refer to Docker hub repo "zeethio". You may to change to your own repo.
 - cupid/storage folder contains PersistentVolume allocated for venus as local disc folder and for venus-auth as nfs mount.
 - cupid/secrets contain template for specifying shared-admin token 
@@ -50,7 +50,7 @@ Generate shared admin token
 ```
 kubectl exec --tty --stdin auth-0  -- /app/venus-auth/venus-auth --repo /data/repo token gen cupid --perm admin
 ```
-Copy the teplate file secrets/shared-token-template.yaml to a file, for example shared-token.yaml. Update the adminToken in this file with the value generate from the above command.
+Copy the template file secrets/shared-token-template.yaml to a file, for example shared-token.yaml. Update the adminToken in this file with the token generated from the above command.
 
 Deploy the secrets
 ```
@@ -63,7 +63,7 @@ kubectl create -f globals/config-map.yaml
 ```
 
 Install Helm charts for venus node service.
-The chart value is by default start from a snaphot of filecoin blockchain. This will accelerate syncing of the node. The vsnapshot value can be from mounted local disc volume of venus pod or from url. setting it null starts from the previous state.
+The chart value is by default start from a snaphot of filecoin blockchain. This will accelerate syncing of the node. The snapshot file can be from mounted local disc volume of venus pod or from url. setting it to null (i.e. --set arguments.snapshot=null supplied during helm install of venus chart) starts the blockchain state from the previous state.
 Set the value in cupid/charts/venus/values.yaml
 arguments:
   snapshot: /data/minimal_finality_stateroots_latest.car
