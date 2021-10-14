@@ -57,7 +57,7 @@ spec:
           - "--api" 
           - "$(NODE_URL)" 
           - "--token" 
-          - "$(NODE_TOKEN)"
+          - "$(ADMIN_TOKEN)"
           - "--auth-token"
           - "$(ADMIN_TOKEN)"
           env:
