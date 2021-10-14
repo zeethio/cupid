@@ -5,21 +5,27 @@
 </p>
 
  <br/><br/>
-### Venus service cluster deployment with kubernetes/helm charts (Under Development)
+### Venus service cluster deployment with kubernetes/helm charts (Under Development). <br/>Venus services provide shared infrastructure for Filecoin storage providers, a form of storage pooling that reduces cost of operation. Visit https://venus.filecoin.io/ for the official documentaion of the Venus project.
+
+This repo contains experimental Kubernetes/Helm charts to deploy the venus services. It may be helpful for the storage providers exiting from the venus incubation program to setup their own service.
+
  <br/><br/>
 <p align="center">
 <img src="doc/deployment.svg" />
 </p>
  <br/><br/>
 
+Note: The information presented in this repo is informal and the purpose is to help undertand the organization of kuberneted/helm charts used for deployment of venus services. 
+For offical documentation of venus services and architecture vist:  
+https://venus.filecoin.io/guide/
 ## Prerequisites:
 
-- kubernetes (v 1.22 or above) cluster with nodes suitable for running venus(requires > 2TiB of storage) and other modules
+- kubernetes (v 1.22 or above) cluster with nodes suitable for running venus(requires > 2TiB of storage) and other modules. Refere the venus documentation of recommeded HW for running the Venus services (https://venus.filecoin.io/master/Chain_service_construction.html#chain-services)
 
 - Helm v3
 ## Repo organization:
 - cupid/cupid repo is an umbrella helm chart that contains a separate subchart for each venus module. For example cupid/cupid/charts/venus contains help sub chart for installing venus module.
-- The docker files for various venus submodules are located in subfolders with names corresponding to the git repo names i.e. cupid/venus, cupid/venus-auth etc.. Modify the git repo checkout command in the Docker file to the required release tag of the module.
+- The docker files for various venus submodules are located in subfolders with names corresponding to the git repo names i.e. cupid/venus, cupid/venus-auth, cupid/venus-messager, cupid/venus-gateway and cupid/venus-miner. Modify the git repo checkout command in the Docker file to the required release tag of the module. Currently the Docker file includes build instructions from the venus deployment guide (https://venus.filecoin.io/guide/How-To-Deploy-MingPool.html). Needs tpo remove build intermediaries to reduce image size.
 - helm charts are located in the cupid/charts folder as subcharts. Currently the charts refer to Docker hub repo "zeethio". You may to change to your own repo.
 - cupid/storage folder contains PersistentVolume allocated for venus as local disc folder and for venus-auth as nfs mount.
 - cupid/secrets contain template for specifying shared-admin token 
@@ -81,4 +87,38 @@ kubectl exec --tty --stdin auth-0  -- /app/venus-auth/venus-auth --repo /data/re
 ```
 ```
 kubectl exec --tty --stdin auth-0  -- /app/venus-auth/venus-auth --repo /data/repo token gen zeethio --perm write
+```
+Use the token generated above to configure venus-sealer and venus-wallet.
+
+Use the notePorts and node addresses exposed from the cluster to access the services.
+
+Look at the following venus incubation exit guideline:
+https://venus.filecoin.io/master/Incubation_exit_guide.html#incubation-exit-guide
+
+Example sealer configuration for venus services hosted at cupid.zeeth.io
+venus node pod/service port 3453 mapped to Nodeport 30002.
+venus-messager pod/service port 39812 mapped to Nodeport 30004.
+venus-gateway  pod/service port 45132 mapped to Nodeport 30003.
+```
+[Node]
+  Url = "/dns/cupid.zeeth.io/tcp/30002"
+  Token = <AUTH_TOKEN_FOR_ACCOUNT_NAME>
+
+[Messager]
+  Url = /ip4/cupid.zeeth.io/tcp/30004
+  Token = <AUTH_TOKEN_FOR_ACCOUNT_NAME>
+
+[RegisterProof]
+  Urls = ["/dns/cupid.zeeth.io/tcp/30003"]
+  Token = <AUTH_TOKEN_FOR_ACCOUNT_NAME>
+
+```
+
+Example wallet configuration for venus services hosted at cupid.zeeth.io.  
+venus-gateway  pod/service port 45132 mapped to Nodeport 30003.
+```
+[APIRegisterHub]
+RegisterAPI = ["/dns/cupid.zeeth.io/tcp/30003"]
+Token = "<AUTH_TOKEN_FOR_ACCOUNT_NAME>"
+SupportAccounts = ["zeethio"]
 ```
