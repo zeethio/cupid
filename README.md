@@ -111,7 +111,7 @@ venus-gateway  pod/service port 45132 mapped to Nodeport 30003.
   Token = <AUTH_TOKEN_FOR_ACCOUNT_NAME>
 
 [Messager]
-  Url = /ip4/cupid.zeeth.io/tcp/30004
+  Url = /dns/cupid.zeeth.io/tcp/30004
   Token = <AUTH_TOKEN_FOR_ACCOUNT_NAME>
 
 [RegisterProof]
