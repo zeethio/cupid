@@ -1,5 +1,5 @@
 // {type:class}
-// {direction:topDown}
+// {direction:leftToRight}
 // {generate:true}
 
 [note: Venus sealer class diagram{bg:cornsilk}]
@@ -14,7 +14,7 @@
 [nodeApi:FullNode]-[note: json RPC client]
 [minerapi:StorageMiner]+-[SectorManager]
 [minerapi:StorageMiner]+-[SectorBlocks:sectorblocks.SectorBlocks]
-[SectorBlocks:sectorblocks.SectorBlocks]+-[keys:types.DealRef]
+[SectorBlocks:sectorblocks.SectorBlocks]+-[keys:types.DealRef | Id, DealId, SectorId, PadOffset, UnPadSize]
 [SectorManager]+-[ffiwrapper.StorageSealer]
 [SectorManager]+-[storage.Prover]
 [SectorManager]+-[FaultTracker]
@@ -23,9 +23,3 @@
 [Prover:storage.WinningPoStProver]+-[verifier:ffiwrapper.Verifier]
 [Prover:storage.WinningPoStProver]+-[miner:abi.ActorID]
 [Prover:storage.WinningPoStProver]+-[winnRpt:abi.RegisteredPoStProof]
-
-[keys:types.DealRef]+-[Id]        
-[keys:types.DealRef]+-[DealId]    
-[keys:types.DealRef]+-[SectorId]  
-[keys:types.DealRef]+-[PadOffset] 
-[keys:types.DealRef]+-[UnPadSize] 
