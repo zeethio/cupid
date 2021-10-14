@@ -65,7 +65,18 @@ arguments:
 ```
 helm install cupid-venus cupid/charts/venus
 ```
+Obtain  token to access venus node (required while configuring miner)
 
+```
+kubectl exec --tty --stdin venus-1-0 -- cat /data/repodir/token
+```
+Use the token output by the above command to update the nodeToken in shared-token.yaml and apply the change.
+
+```
+kubectl apply -f shared-token.yaml
+```
+
+Update the 
 Install Helm charts for all the remaining venus services
 ```
 helm install cupid-gateway cupid/charts/gateway
