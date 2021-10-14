@@ -20,12 +20,8 @@ image:
   repository: zeethio/venus-miner
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v0.1"
+  tag: "v0.2"
 selectorLabel: miner
-arguments:
-  authUrl: http://auth:8989
-  nodeUrl: /dns/venus/tcp/3453/http
-  gatewayUrl: /dns/gateway/tcp/45132
 
 pool:
   replicaCount: 1
