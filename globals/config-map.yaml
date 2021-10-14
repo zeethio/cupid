@@ -5,4 +5,4 @@ metadata:
 data:
   authUrl: http://auth:8989
   nodeUrl: http://venus:3453
-  gatewayUrl: http://venus:3453
+  gatewayUrl: http://gateway:45132

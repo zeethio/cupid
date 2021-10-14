@@ -66,8 +66,8 @@ spec:
                 name: cupid-configmap
                 key: nodeUrl
           ports:
-            - name: http
-              containerPort: 3453
+            - name: messager
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
 {{/*
           livenessProbe:

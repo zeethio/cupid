@@ -21,10 +21,6 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "v0.5"
 selectorLabel: messager
-arguments:
-  authUrl: http://auth:8989
-  nodeUrl: http://venus/tcp/3453
-  gatewayUrl: http://gateway/tcp/45132
 pool:
   replicaCount: 1
   nodeSelector: {}

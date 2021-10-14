@@ -13,7 +13,6 @@ ENV PATH=$PATH:/usr/local/go/bin
 WORKDIR '/app'
 RUN  git clone https://github.com/filecoin-project/venus-miner.git && \
      cd venus-miner && \
-     git checkout incubation && \
      make
 
 ENTRYPOINT ["/app/venus-miner/venus-miner"]

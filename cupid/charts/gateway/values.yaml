@@ -19,10 +19,8 @@ image:
   repository: zeethio/venus-gateway
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v0.2"
+  tag: "v0.3"
 selectorLabel: gateway
-arguments:
-  authUrl: http://auth:8989
 pool:
   replicaCount: 1
   nodeSelector: {}
