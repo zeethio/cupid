@@ -13,7 +13,7 @@
 <hr>
 <br/><br/>
 
-This repo contains experimental Kubernetes/Helm charts to deploy the venus services. It may be helpful for the storage providers exiting from the venus incubation program to setup their own service maintain it easily.
+This repo contains experimental Kubernetes/Helm charts to deploy the venus services. It may be helpful for the storage providers exiting from the venus incubation program to setup their own service and maintain it easily.
 
  <br/><br/>
 <p align="center">
@@ -68,11 +68,13 @@ Setup the global variable that defines service endpoints.
 kubectl create -f globals/config-map.yaml
 ```
 
-Install Helm charts for venus node service.
-The chart value is by default start from a snaphot of filecoin blockchain. This will accelerate syncing of the node. The snapshot file can be from mounted local disc volume of venus pod or from url. setting it to null (i.e. --set arguments.snapshot=null supplied during helm install of venus chart) starts the blockchain state from the previous state.
-Set the value in cupid/charts/venus/values.yaml
-arguments:
-  snapshot: /data/minimal_finality_stateroots_latest.car
+### Install Helm charts for venus node service.
+For faster syncing with the blockchain Venus node can be supplied a snapshot downloded from a trusted site. Refer https://docs.filecoin.io/get-started/lotus/chain/#syncing for details. The snapshot location can be specified through a value as shown below. Set snapshot:null if the node has to start from the previous state.   
+Set the value in cupid/charts/venus/values.yaml  
+
+arguments:  
+  snapshot: /data/minimal_finality_stateroots_latest.car  
+
 
 ```
 helm install cupid-venus cupid/charts/venus
@@ -96,15 +98,15 @@ kubectl exec --tty --stdin auth-0  -- /app/venus-auth/venus-auth --repo /data/re
 ```
 Use the token generated above to configure venus-sealer and venus-wallet.
 
-Use the notePorts and node addresses exposed from the cluster to access the services.
+Use the nodePorts and node addresses exposed from the cluster to access the services.
 
 Look at the following venus incubation exit guideline:
 https://venus.filecoin.io/master/Incubation_exit_guide.html#incubation-exit-guide
 
-Example sealer configuration for venus services hosted at cupid.zeeth.io
-venus node pod/service port 3453 mapped to Nodeport 30002.
-venus-messager pod/service port 39812 mapped to Nodeport 30004.
-venus-gateway  pod/service port 45132 mapped to Nodeport 30003.
+Example sealer configuration for venus services hosted at cupid.zeeth.io  
+venus node service port 3453 is  mapped to Nodeport 30002.  
+venus-messager service port 39812 mapped to Nodeport 30004.  
+venus-gateway service port 45132 mapped to Nodeport 30003.  
 ```
 [Node]
   Url = "/dns/cupid.zeeth.io/tcp/30002"
