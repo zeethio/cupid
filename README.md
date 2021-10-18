@@ -54,7 +54,7 @@ helm install cupid-auth cupid/charts/auth
 Generate shared admin token
 
 ```
-kubectl exec --tty --stdin auth-0  -- /app/venus-auth/venus-auth --repo /data/repo token gen cupid --perm admin
+kubectl exec --tty --stdin auth-0  -- /app/venus-auth/venus-auth --repo /data/repo token gen --perm admin cupid 
 ```
 Copy the template file secrets/shared-token-template.yaml to a file, for example shared-token.yaml. Update the adminToken in this file with the token generated from the above command.
 
@@ -94,7 +94,7 @@ Example user account name: zeethio,  miner id: t01192664
 kubectl exec --tty --stdin auth-0  -- /app/venus-auth/venus-auth --repo /data/repo user add --name zeethio --miner=t01192664
 ```
 ```
-kubectl exec --tty --stdin auth-0  -- /app/venus-auth/venus-auth --repo /data/repo token gen zeethio --perm write
+kubectl exec --tty --stdin auth-0  -- /app/venus-auth/venus-auth --repo /data/repo token gen --perm write zeethio 
 ```
 Use the token generated above to configure venus-sealer and venus-wallet.
 

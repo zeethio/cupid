@@ -1,0 +1,18 @@
+// {type:sequence}
+// {generate:true}
+
+[StorageMiner]fps=NewWindowedPoStScheduler>[StorageMiner]
+[StorageMiner]fps=NewMiner>[StorageMiner]
+[StorageMiner]Run>[WindowPoStScheduler]
+[StorageMiner]Run()>[Miner]
+[Miner]Run>[Sealing]
+[WindowPoStScheduler]start>[changeHandler]
+[WindowPoStScheduler]update>[WindowPoStScheduler]
+[WindowPoStScheduler]update>[changeHandler]
+[changeHandler]run>[proveHandler]
+[proveHandler]processHeadChange>[proveHandler]
+[proveHandler]startGeneratePoST>[WindowPoStScheduler]
+[WindowPoStScheduler]runGeneratePoST>[WindowPoStScheduler]
+[WindowPoStScheduler]runPoStCycle>[WindowPoStScheduler]
+[WindowPoStScheduler]submitPoStMessage>[WindowPoStScheduler]
+[WindowPoStScheduler]PushMessage>[api.IMessager]
