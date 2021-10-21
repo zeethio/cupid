@@ -19,7 +19,7 @@ image:
   repository: zeethio/venus
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v0.4"
+  tag: "v1.1.1"
 selectorLabel: venus
 arguments:
   snapshot: /data/minimal_finality_stateroots_latest.car

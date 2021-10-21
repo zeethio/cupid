@@ -11,7 +11,7 @@ ENV PATH=$PATH:/usr/local/go/bin
 
 
 WORKDIR '/app'
-RUN  git clone https://github.com/filecoin-project/venus.git && \
+RUN  git clone --branch v1.1.1 https://github.com/filecoin-project/venus.git && \
      cd venus && \
      make deps && \
      make

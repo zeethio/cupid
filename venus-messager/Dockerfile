@@ -11,7 +11,7 @@ ENV PATH=$PATH:/usr/local/go/bin
 
 
 WORKDIR '/app'
-RUN  git clone https://github.com/filecoin-project/venus-messager.git && \
+RUN  git clone --branch v1.2.0 https://github.com/filecoin-project/venus-messager.git && \
      cd venus-messager && \
      make
 

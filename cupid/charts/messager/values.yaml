@@ -19,7 +19,7 @@ image:
   repository: zeethio/venus-messager
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v0.5"
+  tag: "v1.2.0"
 selectorLabel: messager
 pool:
   replicaCount: 1
